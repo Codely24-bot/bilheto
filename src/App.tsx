@@ -34,6 +34,13 @@ function useRouter() {
       history.pushState(null, "", href);
       setPath(href);
       window.scrollTo(0, 0);
+
+      const hash = href.split("#")[1];
+      if (hash) {
+        requestAnimationFrame(() => {
+          document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" });
+        });
+      }
     };
     const onPop = () => setPath(location.pathname + location.search);
     document.addEventListener("click", onClick);

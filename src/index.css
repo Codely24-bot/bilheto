@@ -1196,7 +1196,7 @@ ul, ol { list-style: none; }
   grid-template-columns: 1fr 400px;
   gap: 48px;
   align-items: center;
-  padding: 160px 0 80px;
+  padding: 140px 0 80px;
 }
 
 /* Back button */

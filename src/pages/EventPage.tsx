@@ -28,11 +28,11 @@ export function EventPage({ slug }: { slug: string }) {
       {/* Hero */}
       <section className="ibbi-event-hero">
         <div className="ibbi-container">
+          <button className="ibbi-event-back" onClick={() => navigate("/")}>
+            <ArrowLeft size={18} /> Voltar
+          </button>
           <div className="ibbi-event-hero-inner">
             <div className="ibbi-event-hero-info">
-              <button className="ibbi-event-back" onClick={() => navigate("/")}>
-                <ArrowLeft size={18} /> Voltar
-              </button>
               <span className="section-label">{event.category}</span>
               <h1>{event.title}</h1>
               <div className="ibbi-event-hero-meta">

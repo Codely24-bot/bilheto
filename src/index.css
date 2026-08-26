@@ -1201,13 +1201,15 @@ ul, ol { list-style: none; }
 
 /* Back button */
 .ibbi-event-back {
+  position: relative;
+  z-index: 2;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   font-size: 14px;
   font-weight: 600;
   color: var(--gray);
-  margin-bottom: 40px;
+  margin-bottom: 24px;
   transition: color 0.2s;
   cursor: pointer;
   background: none;

@@ -1191,18 +1191,18 @@ ul, ol { list-style: none; }
   z-index: 1;
   display: grid;
   grid-template-columns: 1fr 380px;
-  gap: 32px;
+  gap: 40px;
   align-items: start;
-  padding: 120px 0 60px;
+  padding: 140px 0 70px;
 }
 .ibbi-event-hero-info {
-  padding: 20px 0;
-}
-.ibbi-event-hero-info .section-label {
-  margin-top: 8px;
-  margin-bottom: 12px;
+  padding: 30px 0;
 }
 .ibbi-event-hero-info .ibbi-event-back {
+  margin-bottom: 32px;
+}
+.ibbi-event-hero-info .section-label {
+  margin-top: 0;
   margin-bottom: 16px;
 }
 .ibbi-event-hero-info h1 {
@@ -1210,13 +1210,13 @@ ul, ol { list-style: none; }
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.02em;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 .ibbi-event-hero-meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
   font-size: 14px;
   color: var(--gray);
 }
@@ -1231,6 +1231,7 @@ ul, ol { list-style: none; }
   overflow: hidden;
   border: 1px solid rgba(255,255,255,.1);
   background: var(--bg2);
+  margin-top: 20px;
 }
 .ibbi-event-poster img {
   display: block;
@@ -1480,12 +1481,12 @@ ul, ol { list-style: none; }
 @media (max-width: 900px) {
   .ibbi-event-hero-inner {
     grid-template-columns: 1fr;
-    gap: 24px;
-    padding: 100px 0 40px;
+    gap: 28px;
+    padding: 110px 0 50px;
   }
   .ibbi-event-poster {
-    max-width: 340px;
-    margin: 0 auto;
+    max-width: 320px;
+    margin: 0 auto 16px;
     order: -1;
   }
   .ibbi-event-hero-info { text-align: center; }

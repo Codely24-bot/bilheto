@@ -1174,10 +1174,13 @@ ul, ol { list-style: none; }
 }
 
 /* ── Event Page ────────────────────────────────── */
+
+/* Hero */
 .ibbi-event-hero {
   background: var(--black);
   position: relative;
   overflow: hidden;
+  padding-top: 20px;
 }
 .ibbi-event-hero::after {
   content: '';
@@ -1190,27 +1193,44 @@ ul, ol { list-style: none; }
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: 1fr 380px;
-  gap: 40px;
-  align-items: start;
-  padding: 140px 0 70px;
+  grid-template-columns: 1fr 400px;
+  gap: 48px;
+  align-items: center;
+  padding: 160px 0 80px;
 }
+
+/* Back button */
+.ibbi-event-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray);
+  margin-bottom: 40px;
+  transition: color 0.2s;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+.ibbi-event-back:hover { color: var(--gold); }
+.ibbi-event-back svg { color: var(--gold); }
+
+/* Info block */
 .ibbi-event-hero-info {
-  padding: 30px 0;
-}
-.ibbi-event-hero-info .ibbi-event-back {
-  margin-bottom: 32px;
+  padding: 10px 0;
 }
 .ibbi-event-hero-info .section-label {
-  margin-top: 0;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 .ibbi-event-hero-info h1 {
-  font-size: clamp(28px, 3.5vw, 42px);
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  margin-bottom: 20px;
+  font-size: clamp(30px, 4vw, 48px);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 24px;
+  color: var(--white);
 }
 .ibbi-event-hero-meta {
   display: flex;
@@ -1219,19 +1239,22 @@ ul, ol { list-style: none; }
   gap: 20px;
   font-size: 14px;
   color: var(--gray);
+  margin-top: 8px;
 }
 .ibbi-event-hero-meta svg { color: var(--gold); flex-shrink: 0; }
 .ibbi-event-hero-meta-item {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
+
+/* Poster */
 .ibbi-event-poster {
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
   border: 1px solid rgba(255,255,255,.1);
   background: var(--bg2);
-  margin-top: 20px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.4);
 }
 .ibbi-event-poster img {
   display: block;
@@ -1240,44 +1263,46 @@ ul, ol { list-style: none; }
   object-fit: contain;
 }
 
+/* Body */
 .ibbi-event-body {
-  padding: 0 0 80px;
+  padding: 0 0 100px;
 }
 .ibbi-event-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 400px;
-  gap: 28px;
+  grid-template-columns: minmax(0, 1fr) 420px;
+  gap: 32px;
   align-items: start;
 }
 
+/* Description card */
 .ibbi-event-content {
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: clamp(24px, 4vw, 40px);
+  padding: clamp(28px, 4vw, 44px);
 }
 .ibbi-event-content h2 {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 800;
   color: var(--white);
-  margin-bottom: 10px;
-  margin-top: 28px;
+  margin-bottom: 12px;
+  margin-top: 36px;
 }
 .ibbi-event-content h2:first-child { margin-top: 0; }
 .ibbi-event-content p {
   font-size: 16px;
   color: var(--gray);
-  line-height: 1.7;
+  line-height: 1.8;
 }
-.ibbi-event-content p + h2 { margin-top: 32px; }
+.ibbi-event-content p + h2 { margin-top: 40px; }
 
 .ibbi-event-organizer {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   color: var(--white);
   font-weight: 600;
-  font-size: 15px;
+  font-size: 16px;
 }
 .ibbi-event-organizer svg { color: var(--success); }
 
@@ -1285,43 +1310,49 @@ ul, ol { list-style: none; }
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-top: 24px;
-  padding: 0;
+  margin-top: 28px;
+  padding: 12px 20px;
   font-size: 14px;
   font-weight: 700;
   color: var(--gold);
-  background: none;
-  border: none;
+  background: rgba(214,161,58,.08);
+  border: 1px solid rgba(214,161,58,.2);
+  border-radius: 10px;
   cursor: pointer;
-  transition: color 0.2s;
+  transition: all 0.2s;
 }
-.ibbi-event-share:hover { color: var(--gold-light); }
+.ibbi-event-share:hover {
+  background: rgba(214,161,58,.15);
+  border-color: rgba(214,161,58,.4);
+}
 
+/* Sidebar */
 .ibbi-event-sidebar {
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 24px;
+  padding: 28px;
   position: sticky;
   top: 96px;
   align-self: start;
 }
 .ibbi-event-sidebar h2 {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 800;
-  margin: 0 0 18px;
+  margin: 0 0 20px;
 }
 
+/* Ticket cards */
 .ibbi-ticket-card {
   background: rgba(255,255,255,.03);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 16px;
+  padding: 18px;
   transition: all 0.25s ease;
 }
 .ibbi-ticket-card--selected {
-  background: rgba(255,255,255,.08);
-  border-color: rgba(255,255,255,.4);
+  background: rgba(214,161,58,.06);
+  border-color: var(--gold);
 }
 .ibbi-ticket-header {
   display: flex;
@@ -1334,6 +1365,7 @@ ul, ol { list-style: none; }
   font-weight: 800;
   text-transform: uppercase;
   color: var(--white);
+  letter-spacing: 0.04em;
 }
 .ibbi-ticket-detail {
   font-size: 13px;
@@ -1341,32 +1373,32 @@ ul, ol { list-style: none; }
   margin-top: 4px;
 }
 .ibbi-ticket-price {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 800;
-  color: var(--white);
+  color: var(--gold);
   flex-shrink: 0;
 }
 .ibbi-ticket-controls {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 12px;
-  margin-top: 14px;
+  gap: 14px;
+  margin-top: 16px;
 }
 .ibbi-ticket-qty {
-  min-width: 28px;
+  min-width: 32px;
   text-align: center;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 800;
   color: var(--white);
 }
 .ibbi-ticket-btn {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: 10px;
   background: rgba(255,255,255,.06);
   color: var(--gold);
   border: 1px solid var(--border);
@@ -1382,15 +1414,16 @@ ul, ol { list-style: none; }
   cursor: not-allowed;
 }
 
+/* Coupon */
 .ibbi-event-coupon {
   width: 100%;
-  padding: 12px 14px;
+  padding: 14px 16px;
   background: rgba(255,255,255,.04);
   border: 1px solid var(--border);
   border-radius: 10px;
   color: var(--white);
   font-size: 14px;
-  margin: 14px 0;
+  margin: 16px 0;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 .ibbi-event-coupon::placeholder { color: rgba(255,255,255,.25); }
@@ -1399,6 +1432,7 @@ ul, ol { list-style: none; }
   box-shadow: 0 0 0 3px rgba(214,161,58,.12);
 }
 
+/* Order summary */
 .ibbi-order-summary {
   display: grid;
   gap: 10px;
@@ -1414,9 +1448,9 @@ ul, ol { list-style: none; }
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 14px;
+  padding-top: 16px;
   border-top: 1px solid var(--border);
-  margin-top: 4px;
+  margin-top: 6px;
 }
 .ibbi-order-total span:first-child {
   font-size: 15px;
@@ -1424,25 +1458,30 @@ ul, ol { list-style: none; }
   color: var(--white);
 }
 .ibbi-order-total span:last-child {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 900;
-  color: var(--white);
+  color: var(--gold);
 }
 
 .ibbi-event-buy-btn {
   width: 100%;
-  margin-top: 18px;
+  margin-top: 20px;
+  padding: 16px;
+  font-size: 15px;
 }
 
+/* Bottom bar (mobile) */
 .ibbi-event-bottom-bar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 50;
-  background: var(--black);
+  background: rgba(2,6,8,.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-top: 1px solid var(--border);
-  padding: 14px 20px;
+  padding: 16px 24px;
   display: none;
   align-items: center;
   justify-content: space-between;
@@ -1457,41 +1496,33 @@ ul, ol { list-style: none; }
 }
 .ibbi-event-bottom-bar .ibbi-btn {
   flex-shrink: 0;
-  padding: 12px 24px;
+  padding: 12px 28px;
   font-size: 13px;
 }
 
-.ibbi-event-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--gray);
-  margin-bottom: 24px;
-  transition: color 0.2s;
-  cursor: pointer;
-  background: none;
-  border: none;
-  padding: 0;
+/* ── Event Desktop ──────────────────────────────── */
+@media (min-width: 901px) {
+  .ibbi-event-content:hover,
+  .ibbi-event-sidebar:hover {
+    border-color: var(--border-hover);
+  }
 }
-.ibbi-event-back:hover { color: var(--gold); }
-.ibbi-event-back svg { color: var(--gold); }
 
+/* ── Event Tablet (≤900px) ──────────────────────── */
 @media (max-width: 900px) {
   .ibbi-event-hero-inner {
     grid-template-columns: 1fr;
-    gap: 28px;
-    padding: 110px 0 50px;
+    gap: 32px;
+    padding: 120px 0 60px;
+    text-align: center;
   }
+  .ibbi-event-back { text-align: left; justify-content: flex-start; }
+  .ibbi-event-hero-meta { justify-content: center; }
   .ibbi-event-poster {
-    max-width: 320px;
-    margin: 0 auto 16px;
+    max-width: 360px;
+    margin: 0 auto 24px;
     order: -1;
   }
-  .ibbi-event-hero-info { text-align: center; }
-  .ibbi-event-hero-info .ibbi-event-back { text-align: left; justify-content: flex-start; }
-  .ibbi-event-hero-meta { justify-content: center; }
   .ibbi-event-grid {
     grid-template-columns: 1fr;
   }
@@ -1501,11 +1532,19 @@ ul, ol { list-style: none; }
   }
   .ibbi-event-bottom-bar { display: none !important; }
 }
+
+/* ── Event Mobile (≤540px) ──────────────────────── */
 @media (max-width: 540px) {
+  .ibbi-event-hero { padding-top: 12px; }
+  .ibbi-event-hero-inner { padding: 100px 0 40px; gap: 24px; }
   .ibbi-event-hero-info h1 { font-size: 26px; }
-  .ibbi-event-hero-meta { gap: 10px; font-size: 13px; }
-  .ibbi-event-content { padding: 20px; }
-  .ibbi-event-sidebar { padding: 18px; }
+  .ibbi-event-hero-meta { gap: 12px; font-size: 13px; flex-direction: column; align-items: center; }
+  .ibbi-event-poster { max-width: 280px; }
+  .ibbi-event-content { padding: 22px; }
+  .ibbi-event-content h2 { font-size: 18px; margin-top: 28px; }
+  .ibbi-event-content p { font-size: 15px; }
+  .ibbi-event-sidebar { padding: 20px; }
+  .ibbi-event-sidebar h2 { font-size: 22px; }
 }
 
 /* ── Scroll animations ──────────────────────────── */

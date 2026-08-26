@@ -1,0 +1,36 @@
+{
+  "name": "casa-ibbi",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.112.3",
+    "clsx": "^2.1.1",
+    "html5-qrcode": "^2.3.8",
+    "lucide-react": "^1.31.0",
+    "qrcode.react": "^4.2.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "recharts": "^3.10.1",
+    "source-map-js": "^1.0.2",
+    "tailwind-merge": "^3.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.1.16",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.4",
+    "autoprefixer": "^10.4.21",
+    "oxlint": "^1.75.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.17",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.12"
+  }
+}

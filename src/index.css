@@ -1,0 +1,1531 @@
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
+
+:root {
+  --bg: #071116;
+  --bg2: #0D171B;
+  --black: #020608;
+  --gold: #D6A13A;
+  --gold-light: #E7BC62;
+  --gold-dark: #A8751C;
+  --white: #FFFFFF;
+  --white-soft: #F4F2EC;
+  --gray: #A6ADAF;
+  --muted: #8A9499;
+  --border: rgba(255,255,255,.08);
+  --border-hover: rgba(214,161,58,.45);
+  --glass: rgba(7,17,22,.72);
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+}
+
+a { color: inherit; text-decoration: none; }
+button, input, select, textarea { font: inherit; border: none; outline: none; background: none; color: inherit; }
+img { display: block; max-width: 100%; }
+ul, ol { list-style: none; }
+
+/* ── Container ──────────────────────────────────── */
+.ibbi-container { width: min(1200px, calc(100% - 48px)); margin: 0 auto; }
+@media (max-width: 760px) { .ibbi-container { width: min(100% - 24px); } }
+
+/* ── Section base ───────────────────────────────── */
+.ibbi-section { padding: 100px 0; }
+@media (max-width: 760px) { .ibbi-section { padding: 64px 0; } }
+
+/* ── Section titles ─────────────────────────────── */
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+.section-label::before {
+  content: '';
+  width: 28px;
+  height: 2px;
+  background: var(--gold);
+  display: inline-block;
+}
+
+.section-title {
+  font-size: clamp(32px, 4vw, 50px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  text-align: left;
+}
+
+.section-subtitle {
+  font-size: clamp(15px, 1.5vw, 18px);
+  color: var(--gray);
+  line-height: 1.7;
+  max-width: 540px;
+  margin-top: 18px;
+}
+
+/* ── Buttons ────────────────────────────────────── */
+.ibbi-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-decoration: none;
+  border: none;
+}
+.ibbi-btn:hover { transform: translateY(-2px); }
+
+.ibbi-btn--primary {
+  background: var(--gold);
+  color: var(--white);
+  box-shadow: 0 4px 24px rgba(214,161,58,.2);
+}
+.ibbi-btn--primary:hover {
+  box-shadow: 0 8px 36px rgba(214,161,58,.35);
+  background: var(--gold-light);
+}
+
+.ibbi-btn--outline {
+  background: transparent;
+  color: var(--white);
+  border: 1px solid rgba(255,255,255,.35);
+}
+.ibbi-btn--outline:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.ibbi-btn--ghost {
+  background: transparent;
+  color: var(--gold);
+  padding: 0;
+}
+.ibbi-btn--ghost:hover { color: var(--gold-light); }
+
+.ibbi-btn--small { padding: 10px 20px; font-size: 13px; }
+.ibbi-btn--full { width: 100%; }
+
+/* ── Header ─────────────────────────────────────── */
+.ibbi-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  transition: all 0.35s ease;
+  border-bottom: 1px solid transparent;
+}
+.ibbi-header--scrolled {
+  background: rgba(4,10,13,.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom-color: var(--border);
+}
+
+.ibbi-header-inner {
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ibbi-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.ibbi-logo img {
+  height: 44px;
+  width: auto;
+}
+.ibbi-logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+.ibbi-logo-name {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: 0.02em;
+}
+.ibbi-logo-sub {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.ibbi-nav { display: flex; align-items: center; gap: 6px; }
+.ibbi-nav a {
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,.75);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+.ibbi-nav a:hover,
+.ibbi-nav a.active {
+  color: var(--white);
+  background: rgba(255,255,255,.06);
+}
+.ibbi-nav a.active::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 14px;
+  right: 14px;
+  height: 2px;
+  background: var(--gold);
+  border-radius: 1px;
+}
+
+.ibbi-header-cta {
+  display: flex;
+  align-items: center;
+}
+
+/* ── Mobile menu ────────────────────────────────── */
+.ibbi-mobile-toggle {
+  display: none;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--white);
+  transition: background 0.2s;
+}
+.ibbi-mobile-toggle:hover { background: rgba(255,255,255,.08); }
+
+.ibbi-mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  padding: 0 24px;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.ibbi-mobile-menu--open { transform: translateX(0); }
+
+.ibbi-mobile-menu-header {
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.ibbi-mobile-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  padding: 40px 0;
+}
+.ibbi-mobile-nav a {
+  font-size: 22px;
+  font-weight: 700;
+  color: rgba(255,255,255,.8);
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  transition: color 0.2s;
+}
+.ibbi-mobile-nav a:hover { color: var(--gold); }
+
+.ibbi-mobile-menu-footer {
+  padding: 24px 0 40px;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 900px) {
+  .ibbi-nav, .ibbi-header-cta.desktop-only { display: none !important; }
+  .ibbi-mobile-toggle { display: flex; }
+}
+
+/* ── Hero ───────────────────────────────────────── */
+.ibbi-hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 640px;
+  max-height: 1100px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: var(--black);
+}
+
+.ibbi-hero-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.ibbi-hero-bg img {
+  width: 100%;
+  height: 120%;
+  object-fit: cover;
+  object-position: center 30%;
+  will-change: transform;
+  filter: brightness(0.45) contrast(1.1) saturate(0.85);
+}
+
+.ibbi-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(100deg, rgba(7,17,22,.92) 0%, rgba(7,17,22,.65) 35%, rgba(7,17,22,.25) 65%, transparent 100%),
+    linear-gradient(180deg, transparent 55%, var(--bg) 100%);
+}
+
+.ibbi-hero-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: url("/hero-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.10;
+  pointer-events: none;
+}
+
+.ibbi-hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 0 clamp(24px, 6vw, 80px);
+  max-width: 680px;
+}
+
+.ibbi-hero-year {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--gold);
+  margin-bottom: 24px;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: all 0.6s ease 0.3s;
+}
+.ibbi-hero--visible .ibbi-hero-year { opacity: 1; transform: translateY(0); }
+.ibbi-hero-year::after {
+  content: '';
+  width: 36px;
+  height: 2px;
+  background: var(--gold);
+}
+
+.ibbi-hero-title {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 12px;
+  line-height: 0.95;
+}
+.ibbi-hero-word {
+  font-size: clamp(52px, 7vw, 92px);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: var(--white);
+  opacity: 0;
+  transform: translateY(28px);
+}
+.ibbi-hero--visible .ibbi-hero-word { opacity: 1; transform: translateY(0); }
+.ibbi-hero--visible .ibbi-hero-word:nth-child(1) { transition: all 0.6s ease 0.4s; }
+.ibbi-hero--visible .ibbi-hero-word:nth-child(2) { transition: all 0.6s ease 0.55s; }
+.ibbi-hero--visible .ibbi-hero-word:nth-child(3) { transition: all 0.6s ease 0.7s; }
+.ibbi-hero-word--gold { color: var(--gold); }
+
+.ibbi-hero-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 24px 0 28px;
+  color: var(--gold);
+  opacity: 0;
+  transition: opacity 0.6s ease 0.85s;
+}
+.ibbi-hero--visible .ibbi-hero-divider { opacity: 1; }
+.ibbi-hero-divider-line {
+  flex: 1;
+  max-width: 80px;
+  height: 1px;
+  background: rgba(214,161,58,.4);
+}
+
+.ibbi-hero-text {
+  font-size: clamp(15px, 1.5vw, 18px);
+  line-height: 1.75;
+  color: rgba(255,255,255,.65);
+  max-width: 500px;
+  margin-bottom: 36px;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: all 0.6s ease 0.95s;
+}
+.ibbi-hero--visible .ibbi-hero-text { opacity: 1; transform: translateY(0); }
+
+.ibbi-hero-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: all 0.6s ease 1.1s;
+}
+.ibbi-hero--visible .ibbi-hero-actions { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 760px) {
+  .ibbi-hero {
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  .ibbi-hero-bg img { height: 100%; object-position: center 25%; }
+  .ibbi-hero-overlay {
+    background:
+      linear-gradient(180deg, rgba(1,7,9,.88) 0%, rgba(1,7,9,.55) 35%, rgba(1,7,9,.7) 70%, var(--bg) 100%);
+  }
+  .ibbi-hero-content {
+    padding: 22vh 20px 48px;
+    max-width: 100%;
+  }
+  .ibbi-hero-word { font-size: clamp(44px, 13vw, 70px); }
+  .ibbi-hero-actions { flex-direction: column; }
+  .ibbi-hero-actions .ibbi-btn { width: 100%; justify-content: center; padding: 16px; }
+}
+
+/* ── Quick Info Cards ───────────────────────────── */
+.ibbi-quick-cards {
+  position: relative;
+  z-index: 5;
+  margin-top: -64px;
+  padding: 0 clamp(24px, 5vw, 80px);
+  margin-bottom: 20px;
+}
+.ibbi-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.ibbi-quick-card {
+  background: var(--glass);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 16px;
+  padding: 28px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: all 0.3s ease;
+  box-shadow: 0 20px 60px rgba(0,0,0,.3);
+}
+.ibbi-quick-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--border-hover);
+}
+.ibbi-quick-card-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: rgba(214,161,58,.1);
+  color: var(--gold);
+  flex-shrink: 0;
+}
+.ibbi-quick-card h3 {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--white);
+  white-space: pre-line;
+  line-height: 1.3;
+  text-align: left;
+}
+.ibbi-quick-card p {
+  font-size: 13px;
+  color: var(--gray);
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .ibbi-quick-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 540px) {
+  .ibbi-quick-cards { margin-top: -40px; }
+  .ibbi-quick-grid { grid-template-columns: 1fr; }
+  .ibbi-quick-card { flex-direction: row; align-items: flex-start; padding: 20px; }
+  .ibbi-quick-card h3 { font-size: 14px; }
+  .ibbi-quick-card p { font-size: 12px; }
+}
+
+/* ── About section ──────────────────────────────── */
+.ibbi-about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+.ibbi-about-img {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 4/3;
+}
+.ibbi-about-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.ibbi-about-img:hover img { transform: scale(1.03); }
+.ibbi-about-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  pointer-events: none;
+}
+.ibbi-about-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 32px;
+}
+.ibbi-about-stat {
+  text-align: center;
+  padding: 16px 8px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+}
+.ibbi-about-stat strong {
+  display: block;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--gold);
+}
+.ibbi-about-stat span {
+  font-size: 12px;
+  color: var(--gray);
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 760px) {
+  .ibbi-about-grid { grid-template-columns: 1fr; gap: 36px; }
+}
+
+/* ── Services (Cultos) ──────────────────────────── */
+.ibbi-services-bg {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.ibbi-services-bg > * {
+  position: relative;
+  z-index: 1;
+}
+.ibbi-services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+  margin-top: 40px;
+}
+.ibbi-service-card {
+  background: rgba(7,17,22,.6);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.3s ease;
+}
+.ibbi-service-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-3px);
+}
+.ibbi-service-card-day {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.ibbi-service-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  text-align: left;
+  color: var(--white);
+}
+.ibbi-service-card-time {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ibbi-service-card-time svg { color: var(--gold); }
+
+/* ── Ministries ─────────────────────────────────── */
+.ibbi-ministry-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 40px;
+}
+.ibbi-ministry-card {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  aspect-ratio: 3/2;
+  cursor: pointer;
+  group: ministry;
+}
+.ibbi-ministry-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.ibbi-ministry-card:hover img { transform: scale(1.06); }
+.ibbi-ministry-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 30%, rgba(2,6,8,.88) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 24px;
+  transition: background 0.4s ease;
+}
+.ibbi-ministry-card:hover .ibbi-ministry-card-overlay {
+  background: linear-gradient(180deg, transparent 20%, rgba(168,117,28,.35) 50%, rgba(2,6,8,.92) 100%);
+}
+.ibbi-ministry-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  text-align: left;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+.ibbi-ministry-card p {
+  font-size: 13px;
+  color: rgba(255,255,255,.6);
+  line-height: 1.5;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+.ibbi-ministry-card:hover p { max-height: 80px; }
+.ibbi-ministry-card-arrow {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255,255,255,.1);
+  color: var(--white);
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: all 0.3s ease;
+}
+.ibbi-ministry-card:hover .ibbi-ministry-card-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@media (max-width: 900px) { .ibbi-ministry-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 540px) { .ibbi-ministry-grid { grid-template-columns: 1fr; } }
+
+/* ── Events ─────────────────────────────────────── */
+.ibbi-event-card {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.ibbi-event-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-4px);
+}
+.ibbi-event-card-img {
+  position: relative;
+  overflow: hidden;
+  margin: 10px;
+  border-radius: 10px;
+}
+.ibbi-event-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 10px;
+  transition: transform 0.5s ease;
+}
+.ibbi-event-card:hover .ibbi-event-card-img img { transform: scale(1.05); }
+.ibbi-event-date-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: var(--gold);
+  color: var(--white);
+  border-radius: 10px;
+  padding: 10px 14px;
+  text-align: center;
+  line-height: 1.1;
+}
+.ibbi-event-date-badge strong {
+  display: block;
+  font-size: 24px;
+  font-weight: 800;
+}
+.ibbi-event-date-badge span {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.ibbi-event-card-body {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ibbi-event-card-body h3 {
+  font-size: 22px;
+  font-weight: 700;
+  text-align: left;
+  color: var(--white);
+}
+.ibbi-event-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--gray);
+  font-size: 13px;
+}
+.ibbi-event-meta svg { color: var(--gold); flex-shrink: 0; }
+.ibbi-event-card-body p {
+  font-size: 14px;
+  color: var(--gray);
+  line-height: 1.6;
+}
+
+@media (max-width: 760px) {
+  .ibbi-event-card { grid-template-columns: 1fr; }
+  .ibbi-event-card-img { max-height: 240px; margin: 10px; }
+}
+
+/* ── Media ──────────────────────────────────────── */
+.ibbi-media-featured {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 16/9;
+  background: var(--bg2);
+  cursor: pointer;
+}
+.ibbi-media-featured img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.ibbi-media-featured:hover img { transform: scale(1.03); }
+.ibbi-media-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  box-shadow: 0 8px 40px rgba(214,161,58,.4);
+  transition: all 0.3s ease;
+}
+.ibbi-media-featured:hover .ibbi-media-play {
+  transform: translate(-50%, -50%) scale(1.08);
+  box-shadow: 0 12px 50px rgba(214,161,58,.55);
+}
+.ibbi-media-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 24px;
+}
+.ibbi-media-card {
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+}
+.ibbi-media-card:hover { border-color: var(--border-hover); transform: translateY(-3px); }
+.ibbi-media-card-img {
+  aspect-ratio: 16/9;
+  overflow: hidden;
+}
+.ibbi-media-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.ibbi-media-card:hover .ibbi-media-card-img img { transform: scale(1.05); }
+.ibbi-media-card-body { padding: 16px; }
+.ibbi-media-card-body h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--white);
+  text-align: left;
+  margin-bottom: 4px;
+}
+.ibbi-media-card-body span {
+  font-size: 12px;
+  color: var(--gray);
+}
+
+@media (max-width: 760px) {
+  .ibbi-media-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Gallery ────────────────────────────────────── */
+.ibbi-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 220px;
+  gap: 12px;
+  margin-top: 40px;
+}
+.ibbi-gallery-item {
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+.ibbi-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.ibbi-gallery-item:hover img { transform: scale(1.05); }
+.ibbi-gallery-item--large { grid-row: span 2; }
+.ibbi-gallery-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  transition: background 0.3s ease;
+}
+.ibbi-gallery-item:hover::after { background: rgba(0,0,0,.25); }
+
+@media (max-width: 760px) {
+  .ibbi-gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 160px; }
+}
+
+/* ── Join CTA ───────────────────────────────────── */
+.ibbi-join {
+  position: relative;
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 0;
+}
+.ibbi-join-bg {
+  position: absolute;
+  inset: 0;
+}
+.ibbi-join-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.35);
+}
+.ibbi-join-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(7,17,22,.9) 0%, rgba(7,17,22,.6) 100%);
+}
+.ibbi-join-content {
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
+}
+.ibbi-join-content h2 {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-align: left;
+  margin-bottom: 20px;
+}
+.ibbi-join-content p {
+  font-size: 17px;
+  color: rgba(255,255,255,.65);
+  margin-bottom: 32px;
+  line-height: 1.7;
+}
+.ibbi-join-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+/* ── Location ───────────────────────────────────── */
+.ibbi-location-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+.ibbi-location-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.ibbi-location-info-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.ibbi-location-info-icon {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: rgba(214,161,58,.1);
+  color: var(--gold);
+  flex-shrink: 0;
+}
+.ibbi-location-info-text h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 2px;
+}
+.ibbi-location-info-text p {
+  font-size: 14px;
+  color: var(--gray);
+  line-height: 1.5;
+}
+.ibbi-location-map {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  aspect-ratio: 16/10;
+}
+.ibbi-location-map iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+@media (max-width: 760px) {
+  .ibbi-location-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Contact ────────────────────────────────────── */
+.ibbi-contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+.ibbi-form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.ibbi-form-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray);
+  letter-spacing: 0.02em;
+}
+.ibbi-form-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--white);
+  font-size: 15px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.ibbi-form-input::placeholder { color: rgba(255,255,255,.25); }
+.ibbi-form-input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(214,161,58,.12);
+}
+.ibbi-form-textarea { resize: vertical; min-height: 130px; }
+
+.ibbi-contact-channels {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 28px;
+}
+.ibbi-contact-channel {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  transition: border-color 0.2s;
+}
+.ibbi-contact-channel:hover { border-color: var(--border-hover); }
+.ibbi-contact-channel-icon {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: rgba(214,161,58,.1);
+  color: var(--gold);
+  flex-shrink: 0;
+}
+.ibbi-contact-channel h4 { font-size: 14px; font-weight: 700; color: var(--white); text-align: left; }
+.ibbi-contact-channel p { font-size: 13px; color: var(--gray); text-align: left; }
+
+@media (max-width: 760px) {
+  .ibbi-contact-grid { grid-template-columns: 1fr; }
+}
+
+/* ── WhatsApp float ─────────────────────────────── */
+.ibbi-whatsapp {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 90;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #25D366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 6px 28px rgba(37,211,102,.35);
+  transition: all 0.3s ease;
+  animation: whatsappPulse 2s infinite;
+}
+.ibbi-whatsapp:hover {
+  transform: scale(1.08);
+  box-shadow: 0 10px 40px rgba(37,211,102,.45);
+}
+
+@keyframes whatsappPulse {
+  0%, 100% { box-shadow: 0 6px 28px rgba(37,211,102,.35); }
+  50% { box-shadow: 0 6px 28px rgba(37,211,102,.55), 0 0 0 10px rgba(37,211,102,.12); }
+}
+
+/* ── Footer ─────────────────────────────────────── */
+.ibbi-footer {
+  background: #03090C;
+  border-top: 1px solid var(--border);
+  padding: 64px 0 0;
+  position: relative;
+}
+.ibbi-footer > * {
+  position: relative;
+  z-index: 1;
+}
+.ibbi-footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
+  gap: 40px;
+}
+.ibbi-footer-brand p {
+  font-size: 13px;
+  color: var(--gray);
+  line-height: 1.7;
+  margin-top: 14px;
+  max-width: 280px;
+}
+.ibbi-footer-col h4 {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+.ibbi-footer-col a,
+.ibbi-footer-col span {
+  display: block;
+  font-size: 13px;
+  color: var(--gray);
+  padding: 4px 0;
+  transition: color 0.2s;
+}
+.ibbi-footer-col a:hover { color: var(--gold); }
+.ibbi-footer-bottom {
+  margin-top: 40px;
+  padding: 20px 0;
+  border-top: 1px solid rgba(255,255,255,.06);
+  text-align: center;
+  font-size: 12px;
+  color: rgba(255,255,255,.3);
+}
+
+@media (max-width: 760px) {
+  .ibbi-footer-grid { grid-template-columns: 1fr; gap: 28px; }
+}
+
+/* ── Video modal ────────────────────────────────── */
+.ibbi-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(0,0,0,.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.ibbi-modal-overlay--visible { opacity: 1; }
+.ibbi-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255,255,255,.1);
+  color: var(--white);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.ibbi-modal-close:hover { background: rgba(255,255,255,.2); }
+.ibbi-modal-video {
+  width: 100%;
+  max-width: 900px;
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--black);
+}
+.ibbi-modal-video iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* ── Event Page ────────────────────────────────── */
+.ibbi-event-hero {
+  background: var(--black);
+  position: relative;
+  overflow: hidden;
+}
+.ibbi-event-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, var(--bg) 100%);
+  pointer-events: none;
+}
+.ibbi-event-hero-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 32px;
+  align-items: start;
+  padding: 120px 0 60px;
+}
+.ibbi-event-hero-info {
+  padding: 20px 0;
+}
+.ibbi-event-hero-info h1 {
+  font-size: clamp(28px, 3.5vw, 42px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+.ibbi-event-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  font-size: 14px;
+  color: var(--gray);
+}
+.ibbi-event-hero-meta svg { color: var(--gold); flex-shrink: 0; }
+.ibbi-event-hero-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ibbi-event-poster {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.1);
+  background: var(--bg2);
+}
+.ibbi-event-poster img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.ibbi-event-body {
+  padding: 0 0 80px;
+}
+.ibbi-event-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 400px;
+  gap: 28px;
+  align-items: start;
+}
+
+.ibbi-event-content {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: clamp(24px, 4vw, 40px);
+}
+.ibbi-event-content h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 10px;
+  margin-top: 28px;
+}
+.ibbi-event-content h2:first-child { margin-top: 0; }
+.ibbi-event-content p {
+  font-size: 16px;
+  color: var(--gray);
+  line-height: 1.7;
+}
+.ibbi-event-content p + h2 { margin-top: 32px; }
+
+.ibbi-event-organizer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--white);
+  font-weight: 600;
+  font-size: 15px;
+}
+.ibbi-event-organizer svg { color: var(--success); }
+
+.ibbi-event-share {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gold);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.ibbi-event-share:hover { color: var(--gold-light); }
+
+.ibbi-event-sidebar {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  position: sticky;
+  top: 96px;
+  align-self: start;
+}
+.ibbi-event-sidebar h2 {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0 0 18px;
+}
+
+.ibbi-ticket-card {
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.25s ease;
+}
+.ibbi-ticket-card--selected {
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.4);
+}
+.ibbi-ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.ibbi-ticket-name {
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--white);
+}
+.ibbi-ticket-detail {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.ibbi-ticket-price {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--white);
+  flex-shrink: 0;
+}
+.ibbi-ticket-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+}
+.ibbi-ticket-qty {
+  min-width: 28px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--white);
+}
+.ibbi-ticket-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: rgba(255,255,255,.06);
+  color: var(--gold);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.ibbi-ticket-btn:hover:not(:disabled) {
+  background: rgba(214,161,58,.15);
+  border-color: var(--border-hover);
+}
+.ibbi-ticket-btn:disabled {
+  opacity: .3;
+  cursor: not-allowed;
+}
+
+.ibbi-event-coupon {
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--white);
+  font-size: 14px;
+  margin: 14px 0;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.ibbi-event-coupon::placeholder { color: rgba(255,255,255,.25); }
+.ibbi-event-coupon:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(214,161,58,.12);
+}
+
+.ibbi-order-summary {
+  display: grid;
+  gap: 10px;
+}
+.ibbi-order-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: var(--muted);
+}
+.ibbi-order-line strong { color: var(--white); }
+.ibbi-order-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+}
+.ibbi-order-total span:first-child {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--white);
+}
+.ibbi-order-total span:last-child {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--white);
+}
+
+.ibbi-event-buy-btn {
+  width: 100%;
+  margin-top: 18px;
+}
+
+.ibbi-event-bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: var(--black);
+  border-top: 1px solid var(--border);
+  padding: 14px 20px;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.ibbi-event-bottom-bar--visible { display: flex; }
+.ibbi-event-bottom-bar strong {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1.4;
+}
+.ibbi-event-bottom-bar .ibbi-btn {
+  flex-shrink: 0;
+  padding: 12px 24px;
+  font-size: 13px;
+}
+
+.ibbi-event-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray);
+  margin-bottom: 24px;
+  transition: color 0.2s;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+.ibbi-event-back:hover { color: var(--gold); }
+.ibbi-event-back svg { color: var(--gold); }
+
+@media (max-width: 900px) {
+  .ibbi-event-hero-inner {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 100px 0 40px;
+  }
+  .ibbi-event-poster {
+    max-width: 340px;
+    margin: 0 auto;
+    order: -1;
+  }
+  .ibbi-event-hero-info { text-align: center; }
+  .ibbi-event-hero-meta { justify-content: center; }
+  .ibbi-event-grid {
+    grid-template-columns: 1fr;
+  }
+  .ibbi-event-sidebar {
+    position: static;
+    order: -1;
+  }
+  .ibbi-event-bottom-bar { display: none !important; }
+}
+@media (max-width: 540px) {
+  .ibbi-event-hero-info h1 { font-size: 26px; }
+  .ibbi-event-hero-meta { gap: 10px; font-size: 13px; }
+  .ibbi-event-content { padding: 20px; }
+  .ibbi-event-sidebar { padding: 18px; }
+}
+
+/* ── Scroll animations ──────────────────────────── */
+.ibbi-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.ibbi-reveal--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── No overflow ────────────────────────────────── */
+#root { overflow-x: hidden; }
+
+/* ── Mobile text centering ──────────────────────── */
+@media (max-width: 760px) {
+  .ibbi-section { text-align: center !important; }
+  .ibbi-section .section-title { text-align: center !important; }
+  .ibbi-section .section-subtitle { margin-left: auto; margin-right: auto; }
+  .ibbi-service-card, .ibbi-ministry-card, .ibbi-event-card-body,
+  .ibbi-contact-channel, .ibbi-location-info-item { text-align: center !important; }
+  .ibbi-join-content { text-align: center !important; }
+  .ibbi-join-actions { justify-content: center; }
+  .ibbi-footer { text-align: center; }
+  .ibbi-footer-brand p { margin-left: auto; margin-right: auto; }
+  .ibbi-footer-col { text-align: center; }
+  .ibbi-about-stats { text-align: center !important; }
+  .ibbi-event-card-body { text-align: center !important; }
+  .ibbi-event-card-body p { text-align: center !important; }
+}

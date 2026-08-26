@@ -1,4 +1,4 @@
-import { ArrowLeft, CalendarDays, MapPin, MessageCircle, ShieldCheck, Users } from "lucide-react";
+import { ArrowLeft, CalendarDays, MapPin, MessageCircle, ShieldCheck, Users, Clock, Ticket, Info, Share2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { OrderSummary } from "../components/checkout/OrderSummary";
 import { TicketSelector } from "../components/tickets/TicketSelector";
@@ -20,6 +20,9 @@ export function EventPage({ slug }: { slug: string }) {
     navigate(`/checkout/${crypto.randomUUID()}`);
   };
 
+  const startDate = new Date(event.startDate);
+  const endDate = new Date(event.endDate);
+
   return (
     <main>
       {/* Hero */}
@@ -35,6 +38,9 @@ export function EventPage({ slug }: { slug: string }) {
               <div className="ibbi-event-hero-meta">
                 <span className="ibbi-event-hero-meta-item">
                   <CalendarDays size={16} /> {longDate(event.startDate)}
+                </span>
+                <span className="ibbi-event-hero-meta-item">
+                  <Clock size={16} /> {startDate.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })} – {endDate.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
                 </span>
                 <span className="ibbi-event-hero-meta-item">
                   <MapPin size={16} /> {event.venueName}
@@ -57,22 +63,74 @@ export function EventPage({ slug }: { slug: string }) {
           <div className="ibbi-event-grid">
             {/* Description */}
             <article className="ibbi-event-content">
-              <h2>Descrição</h2>
-              <p>{event.description}</p>
+              <div className="ibbi-event-section">
+                <div className="ibbi-event-section-header">
+                  <Info size={20} />
+                  <h2>Descrição</h2>
+                </div>
+                <p>{event.description}</p>
+              </div>
 
-              <h2>Informações importantes</h2>
-              <p>
-                Apresente o QR Code na entrada. Documento com foto pode ser solicitado. O CPF fica protegido no painel administrativo.
-              </p>
+              <div className="ibbi-event-section">
+                <div className="ibbi-event-section-header">
+                  <Ticket size={20} />
+                  <h2>Informações do evento</h2>
+                </div>
+                <div className="ibbi-event-info-grid">
+                  <div className="ibbi-event-info-row">
+                    <span className="ibbi-event-info-label">Data</span>
+                    <span className="ibbi-event-info-value">{longDate(event.startDate)}</span>
+                  </div>
+                  <div className="ibbi-event-info-row">
+                    <span className="ibbi-event-info-label">Horário</span>
+                    <span className="ibbi-event-info-value">
+                      {startDate.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })} às {endDate.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
+                    </span>
+                  </div>
+                  <div className="ibbi-event-info-row">
+                    <span className="ibbi-event-info-label">Local</span>
+                    <span className="ibbi-event-info-value">{event.venueName}</span>
+                  </div>
+                  <div className="ibbi-event-info-row">
+                    <span className="ibbi-event-info-label">Endereço</span>
+                    <span className="ibbi-event-info-value">{event.address}</span>
+                  </div>
+                  <div className="ibbi-event-info-row">
+                    <span className="ibbi-event-info-label">Classificação</span>
+                    <span className="ibbi-event-info-value">{event.ageRating}</span>
+                  </div>
+                </div>
+              </div>
 
-              <h2>Política de cancelamento</h2>
-              <p>
-                Cancelamentos e reembolsos devem seguir a política configurada pelo organizador e, quando aplicável, a API do gateway de pagamento.
-              </p>
+              <div className="ibbi-event-section">
+                <div className="ibbi-event-section-header">
+                  <ShieldCheck size={20} />
+                  <h2>Política de entrada</h2>
+                </div>
+                <ul className="ibbi-event-rules">
+                  <li>Apresente o QR Code na entrada do evento.</li>
+                  <li>Documento com foto pode ser solicitado na entrada.</li>
+                  <li>O CPF do comprador fica protegido no painel administrativo.</li>
+                  <li>Cada ingresso dá direito a uma pessoa.</li>
+                </ul>
+              </div>
 
-              <h2>Organizador</h2>
+              <div className="ibbi-event-section">
+                <div className="ibbi-event-section-header">
+                  <ShieldCheck size={20} />
+                  <h2>Política de cancelamento</h2>
+                </div>
+                <p>Cancelamentos e reembolsos devem seguir a política configurada pelo organizador e, quando aplicável, a API do gateway de pagamento.</p>
+              </div>
+
+              <div className="ibbi-event-divider" />
+
               <div className="ibbi-event-organizer">
-                <ShieldCheck size={20} /> {event.organizer}
+                <ShieldCheck size={20} />
+                <div>
+                  <span className="ibbi-event-organizer-label">Organizador</span>
+                  <span className="ibbi-event-organizer-name">{event.organizer}</span>
+                </div>
               </div>
 
               <a
@@ -83,7 +141,7 @@ export function EventPage({ slug }: { slug: string }) {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <MessageCircle size={18} /> COMPARTILHAR NO WHATSAPP
+                <Share2 size={18} /> COMPARTILHAR
               </a>
             </article>
 

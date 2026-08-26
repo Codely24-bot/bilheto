@@ -1198,6 +1198,13 @@ ul, ol { list-style: none; }
 .ibbi-event-hero-info {
   padding: 20px 0;
 }
+.ibbi-event-hero-info .section-label {
+  margin-top: 8px;
+  margin-bottom: 12px;
+}
+.ibbi-event-hero-info .ibbi-event-back {
+  margin-bottom: 16px;
+}
 .ibbi-event-hero-info h1 {
   font-size: clamp(28px, 3.5vw, 42px);
   font-weight: 800;
@@ -1482,6 +1489,7 @@ ul, ol { list-style: none; }
     order: -1;
   }
   .ibbi-event-hero-info { text-align: center; }
+  .ibbi-event-hero-info .ibbi-event-back { text-align: left; justify-content: flex-start; }
   .ibbi-event-hero-meta { justify-content: center; }
   .ibbi-event-grid {
     grid-template-columns: 1fr;

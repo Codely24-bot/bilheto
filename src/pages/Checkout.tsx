@@ -89,7 +89,7 @@ export function Checkout({ slug }: { slug: string }) {
     const redirectTo = `/login?redirect=${encodeURIComponent(`/checkout/${slug}`)}`;
     return (
       <main>
-        <section className="ibbi-event-hero" style={{ minHeight: 260, maxHeight: 260 }}>
+        <section className="ibbi-event-hero ibbi-checkout-hero">
           <div className="ibbi-container">
             <div className="ibbi-event-hero-inner">
               <div className="ibbi-event-hero-info">
@@ -125,7 +125,7 @@ export function Checkout({ slug }: { slug: string }) {
   if (order) {
     return (
       <main>
-        <section className="ibbi-event-hero" style={{ minHeight: 260, maxHeight: 260 }}>
+        <section className="ibbi-event-hero ibbi-checkout-hero">
           <div className="ibbi-container">
             <div className="ibbi-event-hero-inner">
               <div className="ibbi-event-hero-info">
@@ -210,7 +210,7 @@ export function Checkout({ slug }: { slug: string }) {
 
   return (
     <main>
-      <section className="ibbi-event-hero" style={{ minHeight: 260, maxHeight: 260 }}>
+      <section className="ibbi-event-hero ibbi-checkout-hero">
         <div className="ibbi-container">
           <div className="ibbi-event-hero-inner">
             <div className="ibbi-event-hero-info">

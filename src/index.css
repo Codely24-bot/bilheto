@@ -2719,8 +2719,11 @@ ul, ol { list-style: none; }
 .ibbi-checkout-hero .ibbi-event-hero-info h1 {
   margin-bottom: 0;
 }
-.ibbi-checkout-hero .ibbi-event-back {
+.ibbi-checkout-hero .ibbi-event-hero-info .ibbi-event-back {
   margin-bottom: 14px;
+  align-self: flex-start;
+  text-align: left !important;
+  justify-content: flex-start !important;
 }
 
 /* ── Mobile text centering + full vertical stacking ────────── */

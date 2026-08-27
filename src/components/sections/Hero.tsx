@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Play } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { siteConfig } from "../../data/siteConfig";
 
 export function Hero() {
@@ -54,9 +54,6 @@ export function Hero() {
         <div className="ibbi-hero-actions">
           <button className="ibbi-btn ibbi-btn--primary" onClick={() => scrollTo("sobre")}>
             CONHEÇA MAIS <ArrowRight size={18} />
-          </button>
-          <button className="ibbi-btn ibbi-btn--outline" onClick={() => scrollTo("midia")}>
-            <Play size={16} fill="currentColor" /> ASSISTA AO VÍDEO
           </button>
         </div>
       </div>

@@ -24,11 +24,11 @@ export const siteConfig = {
     state: "MG",
     full: "R. Cel. Gabriel de Andrade, 735 – Industrial, Contagem – MG",
     googleMapsUrl:
-      "https://www.google.com/maps/place/Igreja+Batista+do+Bairro+Industrial/@-19.9754864,-44.0364271,818m/data=!3m1!1e3!4m6!3m5!1s0xa6be421d813c31:0xdcec19086c1ea259!8m2!3d-19.9754864!4d-44.0364271!16s%2Fg%2F1tlwgwl5?entry=ttu&g_ep=EgoyMDI2MDgyMy4wIKXMDSoASAFQAw%3D%3D",
+      "https://www.google.com/maps/place/Igreja+Batista+do+Bairro+Industrial/@-19.9771486,-44.037031,818m/data=!3m1!1e3!4m6!3m5!1s0xa6be421d813c31:0xdcec19086c1ea259!8m2!3d-19.9771486!4d-44.037031!16s%2Fg%2F1tlwgwl5",
     embedUrl:
-      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3750.8!2d-44.0364271!3d-19.9754864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa6be421d813c31%3A0xdcec19086c1ea259!2sIgreja%20Batista%20do%20Bairro%20Industrial!5e0!3m2!1spt-BR!2sbr!4v1",
-    lat: -19.9754864,
-    lng: -44.0364271,
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3750.8!2d-44.037031!3d-19.9771486!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa6be421d813c31%3A0xdcec19086c1ea259!2sIgreja%20Batista%20do%20Bairro%20Industrial!5e0!3m2!1spt-BR!2sbr!4v1",
+    lat: -19.9771486,
+    lng: -44.037031,
   },
 
   contact: {

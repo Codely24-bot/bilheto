@@ -725,6 +725,7 @@ ul, ol { list-style: none; }
   overflow: hidden;
   margin: 10px;
   border-radius: 10px;
+  aspect-ratio: 16/10;
 }
 .ibbi-event-card-img img {
   width: 100%;
@@ -1506,7 +1507,7 @@ ul, ol { list-style: none; }
 }
 
 .ibbi-event-back {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 6px;
   font-size: 14px;
@@ -1518,10 +1519,12 @@ ul, ol { list-style: none; }
   background: none;
   border: none;
   padding: 0;
+  text-align: left;
+  justify-content: flex-start;
+  width: fit-content;
 }
 .ibbi-event-back:hover { color: var(--gold); }
 .ibbi-event-back svg { color: var(--gold); }
-.ibbi-event-back { text-align: left !important; justify-content: flex-start !important; }
 
 .ibbi-doacoes-hero-titles {
   margin-top: 32px;
@@ -2601,6 +2604,7 @@ ul, ol { list-style: none; }
 .ibbi-tickets-section-header { justify-content: center; text-align: center; flex-direction: column; align-items: center; gap: 6px; }
 .ibbi-tickets-empty { text-align: center; }
 .ibbi-admin-checkin { text-align: center; }
+.ibbi-event-back { text-align: left !important; justify-content: flex-start !important; }
 
 /* ── Mobile text centering + full vertical stacking ────────── */
 @media (max-width: 760px) {
@@ -2672,7 +2676,7 @@ ul, ol { list-style: none; }
     grid-template-columns: 1fr !important;
     text-align: center !important;
   }
-  .ibbi-event-card-img { max-height: 220px; margin: 0 12px; border-radius: 10px; }
+  .ibbi-event-card-img { max-height: 220px; margin: 10px; border-radius: 10px; }
   .ibbi-event-card-body { text-align: center !important; padding: 16px !important; }
   .ibbi-event-card-body p { text-align: center !important; }
   .ibbi-event-meta { justify-content: center; flex-wrap: wrap; text-align: center; }
@@ -2683,7 +2687,7 @@ ul, ol { list-style: none; }
   .ibbi-event-hero-info h1 { font-size: 24px !important; text-align: center !important; }
   .ibbi-event-hero-meta { justify-content: center !important; }
   .ibbi-event-poster { max-width: 200px !important; margin: 0 auto 8px !important; }
-  .ibbi-event-back { margin-bottom: 16px; font-size: 13px; text-align: center; display: flex; justify-content: center; }
+  .ibbi-event-back { margin-bottom: 16px; font-size: 13px; text-align: left; justify-content: flex-start; }
 
   /* Event page → stacked */
   .ibbi-event-sidebar { padding: 16px !important; border-radius: 12px !important; }

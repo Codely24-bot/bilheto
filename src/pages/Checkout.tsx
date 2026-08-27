@@ -186,11 +186,6 @@ export function Checkout({ slug }: { slug: string }) {
                 <input className="input" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="(31) 99999-0000" required />
               </label>
 
-              <div>
-                <span style={{ fontSize: 13, color: "#A6ADAF", display: "block", marginBottom: 6 }}>Selecionar ingresso</span>
-                <TicketSelector event={event} items={cartItems} onChange={setCartItems} />
-              </div>
-
               <button type="submit" className="ibbi-btn ibbi-btn--primary ibbi-btn--full" disabled={loading || quantity === 0} style={{ marginTop: 8 }}>
                 {loading ? "CRIANDO PEDIDO..." : "CONTINUAR"}
               </button>
@@ -206,21 +201,7 @@ export function Checkout({ slug }: { slug: string }) {
                 <span>{event.city} - {event.state}</span>
               </div>
               <div style={{ borderTop: "1px solid var(--border, #1a2e36)", paddingTop: 16, marginTop: 16 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, color: "#A6ADAF" }}>
-                  <span>{batch.ticketTypeName} — {batch.name}</span>
-                  <span>{brl(batch.price)}</span>
-                </div>
-                <div style={{ fontSize: 13, color: batch.quantity - batch.quantitySold <= 10 ? "#f59e0b" : "#A6ADAF", marginTop: 6 }}>
-                  {batch.quantity - batch.quantitySold > 0
-                    ? `${batch.quantity - batch.quantitySold} ingresso(s) disponível(eis) de ${batch.quantity}`
-                    : "ESGOTADO"}
-                </div>
-                {quantity > 0 && (
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, color: "#A6ADAF", marginTop: 8 }}>
-                    <span>{quantity}x {batch.ticketTypeName}</span>
-                    <span>{brl(total)}</span>
-                  </div>
-                )}
+                <TicketSelector event={event} items={cartItems} onChange={setCartItems} />
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: 18, fontWeight: 700, marginTop: 12 }}>
                   <span>Total</span>
                   <span>{brl(total)}</span>

@@ -65,7 +65,7 @@ export function Checkin() {
         console.error("Erro ao abrir camera de check-in:", error);
         if (!disposed) {
           setCameraState("error");
-          setScannerError("Nao foi possivel abrir a camera. Verifique a permissao do navegador.");
+          setScannerError("Não foi possível abrir a câmera. Verifique a permissão do navegador.");
         }
       });
 
@@ -100,7 +100,7 @@ export function Checkin() {
       .single()
       .then(({ data, error }) => {
         if (error || !data) {
-          setCheckResult({ valid: false, message: "Ingresso nao encontrado." });
+          setCheckResult({ valid: false, message: "Ingresso não encontrado." });
           setChecking(false);
           return;
         }
@@ -111,7 +111,7 @@ export function Checkin() {
         if (d.checked_in) {
           setCheckResult({
             valid: false,
-            message: "Este ingresso ja foi utilizado.",
+            message: "Este ingresso já foi utilizado.",
             attendeeName: att?.name,
             code: d.code,
           });
@@ -165,15 +165,14 @@ export function Checkin() {
       <section className="ibbi-checkin-camera-card">
         <div className="ibbi-checkin-camera-header">
           <div>
-            <span>Check-in</span>
-            <strong>{cameraState === "active" ? "Camera ativa" : cameraState === "starting" ? "Abrindo camera" : "Leitor pausado"}</strong>
+            <span>{cameraState === "active" ? "Câmera ativa" : cameraState === "starting" ? "Abrindo câmera" : "Leitor pausado"}</span>
           </div>
           <Camera size={22} />
         </div>
 
         <div className="ibbi-checkin-reader-wrap">
           <div id={READER_ID} className="ibbi-checkin-reader" />
-          {cameraState === "starting" && <p className="ibbi-checkin-reader-status">Abrindo camera...</p>}
+          {cameraState === "starting" && <p className="ibbi-checkin-reader-status">Abrindo câmera...</p>}
           {scannerError && <p className="ibbi-checkin-reader-error">{scannerError}</p>}
         </div>
 
@@ -186,10 +185,10 @@ export function Checkin() {
         {checkResult && !checking && (
           <div className={`ibbi-checkin-result ${checkResult.valid ? "ibbi-checkin-result--valid" : "ibbi-checkin-result--invalid"}`}>
             {checkResult.valid ? <CheckCircle2 size={46} /> : <XCircle size={46} />}
-            <h2>{checkResult.valid ? checkResult.message || "INGRESSO VALIDO" : checkResult.message}</h2>
+            <h2>{checkResult.valid ? checkResult.message || "INGRESSO VÁLIDO" : checkResult.message}</h2>
             {checkResult.attendeeName && <p>Casal: <strong>{checkResult.attendeeName}</strong></p>}
             {checkResult.ticketType && <p>Ingresso: <strong>{checkResult.ticketType} - {checkResult.batchName}</strong></p>}
-            {checkResult.code && <p>Codigo: <strong>{checkResult.code}</strong></p>}
+            {checkResult.code && <p>Código: <strong>{checkResult.code}</strong></p>}
 
             <div className="ibbi-checkin-result-actions">
               {checkResult.valid && !checkResult.message?.includes("CONFIRMADO") && (

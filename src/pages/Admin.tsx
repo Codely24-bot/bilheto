@@ -29,7 +29,7 @@ type OrderRow = {
 };
 
 const NAV_ITEMS = [
-  { label: "Dashboard", icon: LayoutDashboard, href: "/admin/dashboard" },
+  { label: "Painel", icon: LayoutDashboard, href: "/admin/dashboard" },
   { label: "Pedidos", icon: ClipboardList, href: "/admin/pedidos" },
   { label: "Ingressos", icon: Ticket, href: "/admin/ingressos" },
   { label: "Check-in", icon: QrCode, href: "/admin/check-in" },
@@ -42,7 +42,7 @@ export function Admin({ page = "dashboard" }: { page?: string }) {
     : normalizedPage.includes("ingressos") ? "ingressos"
     : normalizedPage.includes("check-in") || normalizedPage.includes("checkin") ? "checkin"
     : "dashboard";
-  const pageTitle = activePage === "dashboard" ? "Dashboard"
+  const pageTitle = activePage === "dashboard" ? "Painel"
     : activePage === "pedidos" ? "Gerenciar Pedidos"
     : activePage === "ingressos" ? "Ingressos"
     : "Check-in";
@@ -244,7 +244,7 @@ function OrdersAdmin() {
                     )}
                     {order.status === "paid" && (
                       <button className="ibbi-btn ibbi-btn--ghost ibbi-btn--small" onClick={() => handleSendEmail(order.id)}>
-                        <Mail size={14} /> Enviar email
+                        <Mail size={14} /> Enviar e-mail
                       </button>
                     )}
                   </div>
@@ -305,7 +305,7 @@ function CheckinAdmin() {
     <div className="ibbi-admin-checkin">
       <QrCode size={64} style={{ color: "var(--gold)", opacity: 0.4 }} />
       <h2>Abrir leitor de QR Code</h2>
-      <p>Escaneie o QR Code do ingresso na porta da igreja para validar a entrada.</p>
+      <p>Escaneie o QR Code do ingresso na entrada da igreja para validar a entrada.</p>
       <a className="ibbi-btn ibbi-btn--primary" href="/checkin">
         <Camera size={18} /> ABRIR LEITOR
       </a>

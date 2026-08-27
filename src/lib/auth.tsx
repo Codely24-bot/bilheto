@@ -81,7 +81,7 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
-export async function registerUser(name: string, email: string, password: string, redirectPath?: string): Promise<{ ok: boolean; error?: string }> {
+export async function registerUser(name: string, email: string, password: string, redirectPath?: string): Promise<{ ok: boolean; error?: string; userId?: string }> {
   if (!supabase) return { ok: false, error: "Banco de dados não conectado." };
   if (!name.trim()) return { ok: false, error: "Informe seu nome." };
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim().toLowerCase())) return { ok: false, error: "Informe um e-mail válido." };
@@ -103,7 +103,7 @@ export async function registerUser(name: string, email: string, password: string
 
   if (error) return { ok: false, error: traduzirErro(error.message) };
   if (data.user && !data.session) return { ok: true, error: "__CONFIRM_EMAIL__" };
-  return { ok: true };
+  return { ok: true, userId: data.session?.user.id ?? data.user?.id };
 }
 
 export async function loginUser(email: string, password: string): Promise<{ ok: boolean; error?: string; isAdmin?: boolean }> {

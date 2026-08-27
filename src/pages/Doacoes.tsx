@@ -72,7 +72,7 @@ export function Doacoes() {
               <p className="ibbi-doacoes-verse">
                 "Cada um contribua como propôs em seu coração, não com tristeza ou por obrigação; porque Deus ama quem dá com alegria. E Deus é poderoso para encher-vos de toda a graça, para que, tendo sempre em tudo o que é necessário, abundeis em toda boa obra, conforme está escrito: Espalhou, deu aos pobres; a sua justiça permanece para sempre."
               </p>
-              <span className="ibbi-doacoes-verse-ref">2 Coríntios 9:7-9 — King James</span>
+              <span className="ibbi-doacoes-verse-ref">2 Coríntios 9:7-9</span>
             </div>
 
           </div>

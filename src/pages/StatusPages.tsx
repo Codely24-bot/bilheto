@@ -30,23 +30,59 @@ export function EmailConfirmed() {
 
   useEffect(() => {
     if (!supabase) { setStatus("error"); return; }
+    let cancelled = false;
 
-    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
-    const code = params.get("code");
-    const token = hashParams.get("access_token") || params.get("token");
-    const type = params.get("type") || hashParams.get("type");
+    const onSession = (session: any) => {
+      if (cancelled) return;
+      if (session) setStatus("ok");
+    };
 
-    if (code) {
-      supabase.auth.exchangeCodeForSession(code).then(({ error }) => {
-        setStatus(error ? "error" : "ok");
-      });
-    } else if (token && type) {
-      supabase.auth.verifyOtp({ token, type: type as "signup" | "magiclink" | "recovery", email: "" }).then(({ error }) => {
-        setStatus(error ? "error" : "ok");
-      });
-    } else {
-      setStatus("error");
-    }
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") onSession(session);
+    });
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (cancelled) return;
+      if (session) { setStatus("ok"); return; }
+
+      const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get("code");
+      const token = params.get("token_hash") || hashParams.get("access_token") || params.get("token");
+      const type = params.get("type") || hashParams.get("type");
+
+      const process = async () => {
+        if (code) {
+          const { error } = await supabase.auth.exchangeCodeForSession(code);
+          if (cancelled) return;
+          if (error) {
+            const { data } = await supabase.auth.getSession();
+            setStatus(data.session ? "ok" : "error");
+          } else {
+            setStatus("ok");
+          }
+        } else if (token && (type === "signup" || type === "magiclink" || type === "recovery")) {
+          const { error } = await supabase.auth.verifyOtp({ token, type: type as "signup" | "magiclink" | "recovery", email: "" });
+          if (cancelled) return;
+          setStatus(error ? "error" : "ok");
+        } else {
+          setTimeout(() => {
+            if (cancelled) return;
+            supabase.auth.getSession().then(({ data }) => {
+              if (cancelled) return;
+              setStatus(data.session ? "ok" : "error");
+            });
+          }, 1200);
+        }
+      };
+
+      process();
+    });
+
+    return () => {
+      cancelled = true;
+      subscription.unsubscribe();
+    };
   }, []);
 
   return (

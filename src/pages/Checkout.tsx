@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { ArrowLeft, Copy, CheckCircle } from "lucide-react";
-import { useAuth } from "../lib/auth";
+import { ArrowLeft, Copy, CheckCircle, Eye, EyeOff, MailCheck } from "lucide-react";
+import { useAuth, registerUser } from "../lib/auth";
 import { createOrder } from "../services/orders";
 import { demoEvents } from "../data/demo";
 import { brl } from "../lib/format";
@@ -18,30 +18,57 @@ export function Checkout({ slug }: { slug: string }) {
   const [email, setEmail] = useState("");
   const [cpf, setCpf] = useState("");
   const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [cartItems, setCartItems] = useState<CartLine[]>([{ batchId: batch.id, quantity: 1 }]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [order, setOrder] = useState<any>(null);
   const [copied, setCopied] = useState(false);
+  const [pendingConfirm, setPendingConfirm] = useState("");
 
   const quantity = cartItems.find((i) => i.batchId === batch.id)?.quantity ?? 0;
   const total = batch.price * quantity;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!user) { setError("Faça login para continuar."); return; }
+    setError("");
     if (!coupleName.trim()) { setError("Informe o nome do casal."); return; }
     if (!email.trim()) { setError("Informe seu e-mail."); return; }
     if (!cpf.trim()) { setError("Informe seu CPF."); return; }
     if (!phone.trim()) { setError("Informe seu telefone."); return; }
     if (quantity === 0) { setError("Selecione pelo menos 1 ingresso."); return; }
 
+    let userId = user?.id;
+
+    if (!userId) {
+      if (password.length < 6) { setError("A senha precisa ter pelo menos 6 caracteres."); return; }
+      if (password !== confirmPassword) { setError("As senhas não coincidem."); return; }
+
+      setLoading(true);
+      const result = await registerUser(coupleName.trim(), email.trim(), password, `/checkout/${slug}`);
+      setLoading(false);
+
+      if (!result.ok) {
+        if (result.error === "__CONFIRM_EMAIL__") {
+          setPendingConfirm(email.trim());
+          return;
+        }
+        setError(result.error ?? "Não foi possível criar a conta.");
+        return;
+      }
+
+      userId = result.userId;
+    }
+
+    if (!userId) { setError("Não foi possível identificar sua conta. Tente novamente."); return; }
+
     setLoading(true);
-    setError("");
 
     try {
       const newOrder = await createOrder({
-        userId: user.id,
+        userId: userId!,
         eventId: event.id,
         buyerName: coupleName.trim(),
         buyerEmail: email.trim(),
@@ -56,6 +83,43 @@ export function Checkout({ slug }: { slug: string }) {
     } finally {
       setLoading(false);
     }
+  }
+
+  if (pendingConfirm) {
+    const redirectTo = `/login?redirect=${encodeURIComponent(`/checkout/${slug}`)}`;
+    return (
+      <main>
+        <section className="ibbi-event-hero" style={{ minHeight: 260, maxHeight: 260 }}>
+          <div className="ibbi-container">
+            <div className="ibbi-event-hero-inner">
+              <div className="ibbi-event-hero-info">
+                <span className="section-label">Confirmação de e-mail</span>
+                <h1>Conta criada!</h1>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="ibbi-section" style={{ padding: "60px 0 100px" }}>
+          <div className="ibbi-container" style={{ maxWidth: 500, margin: "0 auto" }}>
+            <div className="ibbi-checkout-success-card">
+              <MailCheck size={64} style={{ color: "var(--gold, #D6A13A)" }} />
+              <h2>Veja seu e-mail</h2>
+              <p style={{ color: "#A6ADAF", textAlign: "center" }}>
+                Enviamos um link de confirmação para <strong style={{ color: "#fff" }}>{pendingConfirm}</strong>. Confirme seu e-mail e depois faça login para concluir a compra.
+              </p>
+              <div className="ibbi-checkout-success-divider" />
+              <a href={redirectTo} className="ibbi-btn ibbi-btn--primary ibbi-btn--full" style={{ marginTop: 16 }}>
+                IR PARA LOGIN
+              </a>
+              <a href="/" className="ibbi-checkout-success-link">
+                Voltar para a página inicial
+              </a>
+            </div>
+          </div>
+        </section>
+      </main>
+    );
   }
 
   if (order) {
@@ -168,7 +232,7 @@ export function Checkout({ slug }: { slug: string }) {
 
               <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                 <span style={{ fontSize: 13, color: "#A6ADAF" }}>Nome do casal no ingresso *</span>
-                <input className="input" value={coupleName} onChange={(e) => setCoupleName(e.target.value)} placeholder="Ex: Joao e Maria" required />
+                <input className="input" value={coupleName} onChange={(e) => setCoupleName(e.target.value)} placeholder="Ex: João e Maria" required />
               </label>
 
               <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
@@ -186,8 +250,55 @@ export function Checkout({ slug }: { slug: string }) {
                 <input className="input" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="(31) 99999-0000" required />
               </label>
 
+              {!user && (
+                <>
+                  <div style={{ height: 1, background: "var(--border, #1a2e36)", margin: "4px 0" }} />
+                  <p style={{ fontSize: 14, fontWeight: 700, color: "#fff", margin: 0 }}>
+                    Crie sua conta para continuar
+                  </p>
+                  <p style={{ fontSize: 13, color: "#A6ADAF", margin: 0 }}>
+                    Você usará este e-mail e senha para acessar seus ingressos depois.
+                  </p>
+
+                  <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    <span style={{ fontSize: 13, color: "#A6ADAF" }}>Senha *</span>
+                    <div style={{ position: "relative" }}>
+                      <input
+                        className="input"
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Mínimo 6 caracteres"
+                        autoComplete="new-password"
+                        style={{ paddingRight: 46 }}
+                      />
+                      <button
+                        type="button"
+                        aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                        onClick={() => setShowPassword((v) => !v)}
+                        style={{ position: "absolute", right: 12, top: 12, background: "none", border: 0, color: "var(--muted)", cursor: "pointer", padding: 0 }}
+                      >
+                        {showPassword ? <EyeOff size={19} /> : <Eye size={19} />}
+                      </button>
+                    </div>
+                  </label>
+
+                  <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    <span style={{ fontSize: 13, color: "#A6ADAF" }}>Confirmar senha *</span>
+                    <input
+                      className="input"
+                      type={showPassword ? "text" : "password"}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="Repita a senha"
+                      autoComplete="new-password"
+                    />
+                  </label>
+                </>
+              )}
+
               <button type="submit" className="ibbi-btn ibbi-btn--primary ibbi-btn--full" disabled={loading || quantity === 0} style={{ marginTop: 8 }}>
-                {loading ? "CRIANDO PEDIDO..." : "CONTINUAR"}
+                {loading ? "CRIANDO PEDIDO..." : user ? "CONTINUAR" : "CRIAR CONTA E CONTINUAR"}
               </button>
             </form>
 

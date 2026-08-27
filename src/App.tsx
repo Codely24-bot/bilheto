@@ -104,7 +104,7 @@ function AppRoutes() {
   }
   if (path.startsWith("/checkout/")) {
     const slug = decodeURIComponent(path.split("/")[2] ?? "");
-    page = !user ? <Redirect to={`/login?redirect=${encodeURIComponent(path)}`} /> : isAdmin ? <Redirect to="/admin/dashboard" /> : <Checkout slug={slug} />;
+    page = isAdmin ? <Redirect to="/admin/dashboard" /> : <Checkout slug={slug} />;
   }
   if (path.startsWith("/auth/confirm")) page = <EmailConfirmed />;
   if (path.startsWith("/redefinir-senha")) page = <ResetPasswordPage />;

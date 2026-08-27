@@ -135,7 +135,7 @@ export async function resetPassword(email: string): Promise<{ ok: boolean; error
   if (!email.trim()) return { ok: false, error: "Informe seu e-mail." };
 
   const { error } = await supabase.auth.resetPasswordForEmail(email.trim().toLowerCase(), {
-    redirectTo: `${window.location.origin}/auth/confirm?type=recovery`,
+    redirectTo: `${window.location.origin}/redefinir-senha`,
   });
 
   if (error) return { ok: false, error: traduzirErro(error.message) };

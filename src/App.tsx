@@ -13,7 +13,7 @@ import { MyTickets } from "./pages/MyTickets";
 import { TicketPage } from "./pages/TicketPage";
 import { Admin } from "./pages/Admin";
 import { Doacoes } from "./pages/Doacoes";
-import { EmailConfirmed } from "./pages/StatusPages";
+import { EmailConfirmed, ResetPasswordPage } from "./pages/StatusPages";
 
 function useRouter() {
   const [path, setPath] = useState(location.pathname + location.search);
@@ -107,6 +107,7 @@ function AppRoutes() {
     page = !user ? <Redirect to={`/login?redirect=${encodeURIComponent(path)}`} /> : isAdmin ? <Redirect to="/admin/dashboard" /> : <Checkout slug={slug} />;
   }
   if (path.startsWith("/auth/confirm")) page = <EmailConfirmed />;
+  if (path.startsWith("/redefinir-senha")) page = <ResetPasswordPage />;
   if (path.startsWith("/doacoes")) page = <Doacoes />;
   if (path.startsWith("/meus-ingressos")) page = user ? (isAdmin ? <Redirect to="/admin/dashboard" /> : <MyTickets />) : <Redirect to="/login" />;
   if (path.startsWith("/ingresso/")) page = <TicketPage token={decodeURIComponent(path.split("/")[2] ?? "")} />;

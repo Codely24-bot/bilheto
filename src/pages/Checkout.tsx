@@ -4,6 +4,8 @@ import { useAuth } from "../lib/auth";
 import { createOrder } from "../services/orders";
 import { demoEvents } from "../data/demo";
 import { brl } from "../lib/format";
+import { TicketSelector } from "../components/tickets/TicketSelector";
+import type { CartLine } from "../types";
 
 const PIX_KEY = "17509738000181";
 
@@ -16,12 +18,13 @@ export function Checkout({ slug }: { slug: string }) {
   const [email, setEmail] = useState("");
   const [cpf, setCpf] = useState("");
   const [phone, setPhone] = useState("");
-  const [quantity, setQuantity] = useState(1);
+  const [cartItems, setCartItems] = useState<CartLine[]>([{ batchId: batch.id, quantity: 1 }]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [order, setOrder] = useState<any>(null);
   const [copied, setCopied] = useState(false);
 
+  const quantity = cartItems.find((i) => i.batchId === batch.id)?.quantity ?? 0;
   const total = batch.price * quantity;
 
   async function handleSubmit(e: React.FormEvent) {
@@ -31,6 +34,7 @@ export function Checkout({ slug }: { slug: string }) {
     if (!email.trim()) { setError("Informe seu e-mail."); return; }
     if (!cpf.trim()) { setError("Informe seu CPF."); return; }
     if (!phone.trim()) { setError("Informe seu telefone."); return; }
+    if (quantity === 0) { setError("Selecione pelo menos 1 ingresso."); return; }
 
     setLoading(true);
     setError("");
@@ -43,7 +47,7 @@ export function Checkout({ slug }: { slug: string }) {
         buyerEmail: email.trim(),
         buyerCpf: cpf.trim(),
         buyerPhone: phone.trim(),
-        items: [{ batchId: batch.id, quantity }],
+        items: cartItems,
         total,
       });
       setOrder(newOrder);
@@ -182,16 +186,12 @@ export function Checkout({ slug }: { slug: string }) {
                 <input className="input" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="(31) 99999-0000" required />
               </label>
 
-              <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                <span style={{ fontSize: 13, color: "#A6ADAF" }}>Quantidade</span>
-                <select className="input" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))}>
-                  {Array.from({ length: batch.maxPerOrder }, (_, i) => i + 1).map((n) => (
-                    <option key={n} value={n}>{n} {n === 1 ? "ingresso" : "ingressos"}</option>
-                  ))}
-                </select>
-              </label>
+              <div>
+                <span style={{ fontSize: 13, color: "#A6ADAF", display: "block", marginBottom: 6 }}>Selecionar ingresso</span>
+                <TicketSelector event={event} items={cartItems} onChange={setCartItems} />
+              </div>
 
-              <button type="submit" className="ibbi-btn ibbi-btn--primary ibbi-btn--full" disabled={loading} style={{ marginTop: 8 }}>
+              <button type="submit" className="ibbi-btn ibbi-btn--primary ibbi-btn--full" disabled={loading || quantity === 0} style={{ marginTop: 8 }}>
                 {loading ? "CRIANDO PEDIDO..." : "CONTINUAR"}
               </button>
             </form>
@@ -200,8 +200,8 @@ export function Checkout({ slug }: { slug: string }) {
               <div className="ibbi-checkout-event-thumb">
                 <img src={event.posterUrl ?? event.coverUrl} alt={event.title} />
               </div>
-              <h2>{event.title}</h2>
-              <div className="ibbi-checkout-event-meta">
+              <h2 style={{ textAlign: "center" }}>{event.title}</h2>
+              <div className="ibbi-checkout-event-meta" style={{ textAlign: "center" }}>
                 <span>{event.venueName}</span>
                 <span>{event.city} - {event.state}</span>
               </div>
@@ -210,6 +210,17 @@ export function Checkout({ slug }: { slug: string }) {
                   <span>{batch.ticketTypeName} — {batch.name}</span>
                   <span>{brl(batch.price)}</span>
                 </div>
+                <div style={{ fontSize: 13, color: batch.quantity - batch.quantitySold <= 10 ? "#f59e0b" : "#A6ADAF", marginTop: 6 }}>
+                  {batch.quantity - batch.quantitySold > 0
+                    ? `${batch.quantity - batch.quantitySold} ingresso(s) disponível(eis) de ${batch.quantity}`
+                    : "ESGOTADO"}
+                </div>
+                {quantity > 0 && (
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, color: "#A6ADAF", marginTop: 8 }}>
+                    <span>{quantity}x {batch.ticketTypeName}</span>
+                    <span>{brl(total)}</span>
+                  </div>
+                )}
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: 18, fontWeight: 700, marginTop: 12 }}>
                   <span>Total</span>
                   <span>{brl(total)}</span>

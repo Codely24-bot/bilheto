@@ -2590,6 +2590,18 @@ ul, ol { list-style: none; }
 /* ── No overflow ────────────────────────────────── */
 #root { overflow-x: hidden; }
 
+/* ── Center all titles & subtitles ────────────────── */
+.ibbi-event-hero-info { text-align: center; }
+.ibbi-event-hero-info h1 { text-align: center; }
+.ibbi-event-hero-meta { justify-content: center; }
+.ibbi-event-content h2 { text-align: center; }
+.ibbi-event-sidebar h2 { text-align: center; }
+.ibbi-checkout-success-card h2 { text-align: center; }
+.ibbi-checkout-event-meta { text-align: center; }
+.ibbi-tickets-section-header { justify-content: center; text-align: center; flex-direction: column; align-items: center; gap: 6px; }
+.ibbi-tickets-empty { text-align: center; }
+.ibbi-admin-checkin { text-align: center; }
+
 /* ── Mobile text centering + full vertical stacking ────────── */
 @media (max-width: 760px) {
   .ibbi-section { text-align: center !important; }

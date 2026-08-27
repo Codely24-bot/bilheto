@@ -23,6 +23,18 @@ export function Login({ mode = "login" }: { mode?: Mode }) {
   const [adminForm, setAdminForm] = useState({ email: "", password: "" });
 
   const texts = copy[mode];
+  const params = new URLSearchParams(window.location.search);
+  const requestedRedirect = params.get("redirect");
+  const safeRedirect = requestedRedirect && requestedRedirect.startsWith("/") && !requestedRedirect.startsWith("//")
+    ? requestedRedirect
+    : null;
+  const redirectQuery = safeRedirect ? `?redirect=${encodeURIComponent(safeRedirect)}` : "";
+  const userRedirect = safeRedirect && !safeRedirect.startsWith("/admin") && safeRedirect !== "/checkin"
+    ? safeRedirect
+    : "/meus-ingressos";
+  const adminRedirect = safeRedirect && (safeRedirect.startsWith("/admin") || safeRedirect === "/checkin")
+    ? safeRedirect
+    : "/admin/dashboard";
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
@@ -32,12 +44,13 @@ export function Login({ mode = "login" }: { mode?: Mode }) {
 
     try {
       if (mode === "signup") {
-        const result = await registerUser(form.name, form.email, form.password);
+        const result = await registerUser(form.name, form.email, form.password, userRedirect);
         if (!result.ok) return setError(result.error ?? "Não foi possível criar a conta.");
         if (result.error === "__CONFIRM_EMAIL__") {
           setNotice("Conta criada! Verifique seu e-mail para confirmar o cadastro.");
           return;
         }
+        navigate(userRedirect);
         return;
       }
 
@@ -50,13 +63,11 @@ export function Login({ mode = "login" }: { mode?: Mode }) {
 
       const result = await loginUser(form.email, form.password);
       if (!result.ok) return setError(result.error ?? "Não foi possível entrar.");
-      const params = new URLSearchParams(window.location.search);
-      const redirect = params.get("redirect");
       if (result.isAdmin) {
-        navigate(redirect?.startsWith("/admin") || redirect === "/checkin" ? redirect : "/admin/dashboard");
+        navigate(adminRedirect);
         return;
       }
-      navigate(redirect && !redirect.startsWith("/admin") && redirect !== "/checkin" ? redirect : "/meus-ingressos");
+      navigate(userRedirect);
     } finally {
       setSubmitting(false);
     }
@@ -102,7 +113,7 @@ export function Login({ mode = "login" }: { mode?: Mode }) {
 
             <div className="ibbi-auth-form">
               {mode !== "login" && (
-                <a href="/login" className="ibbi-event-back" style={{ marginBottom: 20 }}>
+                <a href={`/login${redirectQuery}`} className="ibbi-event-back" style={{ marginBottom: 20 }}>
                   <ArrowLeft size={15} /> Voltar para o login
                 </a>
               )}
@@ -138,7 +149,7 @@ export function Login({ mode = "login" }: { mode?: Mode }) {
                   <div className="ibbi-checkout-field">
                     <div className="ibbi-checkout-label" style={{ display: "flex", justifyContent: "space-between" }}>
                       <span style={{ display: "flex", alignItems: "center", gap: 6 }}><LockKeyhole size={14} /> Senha</span>
-                      {mode === "login" && <a href="/esqueci-senha" style={{ color: "var(--gold)", fontWeight: 600, fontSize: 13 }}>Esqueci minha senha</a>}
+                      {mode === "login" && <a href={`/esqueci-senha${redirectQuery}`} style={{ color: "var(--gold)", fontWeight: 600, fontSize: 13 }}>Esqueci minha senha</a>}
                     </div>
                     <div style={{ position: "relative" }}>
                       <input
@@ -172,12 +183,12 @@ export function Login({ mode = "login" }: { mode?: Mode }) {
 
               {mode === "login" && (
                 <p className="ibbi-auth-switch">
-                  Não tem conta? <a href="/cadastro">Cadastre-se grátis</a>
+                  Não tem conta? <a href={`/cadastro${redirectQuery}`}>Cadastre-se grátis</a>
                 </p>
               )}
               {mode === "signup" && (
                 <p className="ibbi-auth-switch">
-                  Já tem conta? <a href="/login">Fazer login</a>
+                  Já tem conta? <a href={`/login${redirectQuery}`}>Fazer login</a>
                 </p>
               )}
 

@@ -5,11 +5,16 @@ import { supabase } from "../lib/supabase";
 export function EmailConfirmed() {
   const [status, setStatus] = useState<"loading" | "ok" | "error">("loading");
   const [message, setMessage] = useState("Confirmando seu e-mail...");
+  const params = new URLSearchParams(window.location.search);
+  const requestedRedirect = params.get("redirect");
+  const safeRedirect = requestedRedirect && requestedRedirect.startsWith("/") && !requestedRedirect.startsWith("//")
+    ? requestedRedirect
+    : null;
+  const redirectQuery = safeRedirect ? `?redirect=${encodeURIComponent(safeRedirect)}` : "";
 
   useEffect(() => {
     if (!supabase) { setStatus("error"); setMessage("Supabase não configurado."); return; }
 
-    const params = new URLSearchParams(window.location.search);
     const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
     const code = params.get("code");
     const token = hashParams.get("access_token") || params.get("token");
@@ -54,7 +59,7 @@ export function EmailConfirmed() {
 
             <div className="ibbi-checkout-success-divider" />
 
-            <a href="/login" className="ibbi-btn ibbi-btn--primary ibbi-btn--full">
+            <a href={`/login${redirectQuery}`} className="ibbi-btn ibbi-btn--primary ibbi-btn--full">
               FAZER LOGIN
             </a>
 

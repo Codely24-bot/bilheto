@@ -1,9 +1,13 @@
 import { CalendarDays, MapPin, MessageCircle, ShieldCheck, Users } from "lucide-react";
 import { demoEvents } from "../data/demo";
 import { longDate } from "../lib/format";
+import { useAuth } from "../lib/auth";
 
 export function EventPage({ slug }: { slug: string }) {
+  const { user } = useAuth();
   const event = demoEvents.find((item) => item.slug === slug) ?? demoEvents[0];
+  const checkoutHref = `/checkout/${event.slug}`;
+  const buyHref = user ? checkoutHref : `/login?redirect=${encodeURIComponent(checkoutHref)}`;
 
   return (
     <main>
@@ -73,7 +77,7 @@ export function EventPage({ slug }: { slug: string }) {
                 <span>{event.city} - {event.state}</span>
               </div>
               <a
-                href={`/checkout/${event.slug}`}
+                href={buyHref}
                 className="ibbi-btn ibbi-btn--primary ibbi-btn--full"
                 style={{ marginTop: 16, textAlign: "center", justifyContent: "center" }}
               >

@@ -66,11 +66,25 @@ function Redirect({ to }: { to: string }) {
   return null;
 }
 
+function safeRedirectFrom(fullPath: string) {
+  const params = new URLSearchParams(fullPath.split("?")[1] ?? "");
+  const redirect = params.get("redirect");
+  if (!redirect || !redirect.startsWith("/") || redirect.startsWith("//")) return null;
+  return redirect;
+}
+
 function AppRoutes() {
   const fullPath = useRouter();
   const path = fullPath.split("?")[0];
   const { user, isAdmin, loading } = useAuth();
   const authenticatedHome = isAdmin ? "/admin/dashboard" : "/meus-ingressos";
+  const requestedRedirect = safeRedirectFrom(fullPath);
+  const userLoginRedirect = requestedRedirect && !requestedRedirect.startsWith("/admin") && requestedRedirect !== "/checkin"
+    ? requestedRedirect
+    : authenticatedHome;
+  const adminLoginRedirect = requestedRedirect && (requestedRedirect.startsWith("/admin") || requestedRedirect === "/checkin")
+    ? requestedRedirect
+    : authenticatedHome;
 
   if (loading) {
     return (
@@ -90,15 +104,15 @@ function AppRoutes() {
   }
   if (path.startsWith("/checkout/")) {
     const slug = decodeURIComponent(path.split("/")[2] ?? "");
-    page = isAdmin ? <Redirect to="/admin/dashboard" /> : <Checkout slug={slug} />;
+    page = !user ? <Redirect to={`/login?redirect=${encodeURIComponent(path)}`} /> : isAdmin ? <Redirect to="/admin/dashboard" /> : <Checkout slug={slug} />;
   }
   if (path.startsWith("/auth/confirm")) page = <EmailConfirmed />;
   if (path.startsWith("/doacoes")) page = <Doacoes />;
   if (path.startsWith("/meus-ingressos")) page = user ? (isAdmin ? <Redirect to="/admin/dashboard" /> : <MyTickets />) : <Redirect to="/login" />;
   if (path.startsWith("/ingresso/")) page = <TicketPage token={decodeURIComponent(path.split("/")[2] ?? "")} />;
   if (path.startsWith("/checkin")) page = isAdmin ? <Checkin /> : <Redirect to="/login?redirect=/checkin" />;
-  if (path.startsWith("/login")) page = user ? <Redirect to={authenticatedHome} /> : <Login />;
-  if (path.startsWith("/cadastro")) page = user ? <Redirect to={authenticatedHome} /> : <Login mode="signup" />;
+  if (path.startsWith("/login")) page = user ? <Redirect to={isAdmin ? adminLoginRedirect : userLoginRedirect} /> : <Login />;
+  if (path.startsWith("/cadastro")) page = user ? <Redirect to={isAdmin ? adminLoginRedirect : userLoginRedirect} /> : <Login mode="signup" />;
   if (path.startsWith("/esqueci-senha")) page = <Login mode="forgot" />;
   if (path.startsWith("/admin")) {
     const params = new URLSearchParams(fullPath.split("?")[1] ?? "");

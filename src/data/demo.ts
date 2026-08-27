@@ -67,7 +67,7 @@ export const demoTickets: Ticket[] = [
     attendeeName: "Victor e Juliana",
     ticketType: "CASAL",
     batchName: "Lote único",
-    date: "19 set 2026, 19:00",
+date: "19 set 2026, 19:00",
     venue: "IBBI – Igreja Batista do Bairro Industrial — R. Cel. Gabriel de Andrade, 735 – Industrial, Contagem – MG",
     status: "valid",
     checkedIn: false

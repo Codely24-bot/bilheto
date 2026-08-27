@@ -1,19 +1,34 @@
-import { Clock, MailCheck } from "lucide-react";
+import { BadgeCheck, CircleX, LoaderCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 
+const CONFIRM_COPY = {
+  loading: {
+    title: "Verificando seu e-mail...",
+    text: "Aguarde um instante enquanto confirmamos sua conta.",
+  },
+  ok: {
+    title: "E-mail verificado com sucesso!",
+    text: "Sua conta foi confirmada. Agora você já pode fazer login e acessar todos os recursos.",
+  },
+  error: {
+    title: "Não foi possível confirmar",
+    text: "O link de confirmação é inválido ou expirou. Tente solicitar um novo link de confirmação.",
+  },
+} as const;
+
 export function EmailConfirmed() {
   const [status, setStatus] = useState<"loading" | "ok" | "error">("loading");
-  const [message, setMessage] = useState("Confirmando seu e-mail...");
   const params = new URLSearchParams(window.location.search);
   const requestedRedirect = params.get("redirect");
   const safeRedirect = requestedRedirect && requestedRedirect.startsWith("/") && !requestedRedirect.startsWith("//")
     ? requestedRedirect
     : null;
   const redirectQuery = safeRedirect ? `?redirect=${encodeURIComponent(safeRedirect)}` : "";
+  const copy = CONFIRM_COPY[status];
 
   useEffect(() => {
-    if (!supabase) { setStatus("error"); setMessage("Supabase não configurado."); return; }
+    if (!supabase) { setStatus("error"); return; }
 
     const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
     const code = params.get("code");
@@ -22,51 +37,47 @@ export function EmailConfirmed() {
 
     if (code) {
       supabase.auth.exchangeCodeForSession(code).then(({ error }) => {
-        if (error) { setStatus("error"); setMessage(error.message); }
-        else { setStatus("ok"); setMessage("E-mail confirmado com sucesso!"); }
+        setStatus(error ? "error" : "ok");
       });
     } else if (token && type) {
       supabase.auth.verifyOtp({ token, type: type as "signup" | "magiclink" | "recovery", email: "" }).then(({ error }) => {
-        if (error) { setStatus("error"); setMessage(error.message); }
-        else { setStatus("ok"); setMessage("E-mail confirmado com sucesso!"); }
+        setStatus(error ? "error" : "ok");
       });
     } else {
       setStatus("error");
-      setMessage("Link de confirmação inválido ou expirado.");
     }
   }, []);
 
   return (
     <main>
-      <section className="ibbi-event-hero" style={{ minHeight: 260, maxHeight: 260 }}>
-        <div className="ibbi-container">
-          <div className="ibbi-event-hero-inner">
-            <div className="ibbi-event-hero-info">
-              <span className="section-label">Confirmação de e-mail</span>
-              <h1>{status === "ok" ? "E-mail confirmado!" : status === "error" ? "Erro na confirmação" : "Confirmando..."}</h1>
-            </div>
+      <section
+        className="ibbi-confirm"
+        style={{ minHeight: "100dvh", display: "flex", alignItems: "center", justifyContent: "center", padding: "48px 20px" }}
+      >
+        <div className="ibbi-confirm-card">
+          <div className={`ibbi-confirm-badge ibbi-confirm-badge--${status}`}>
+            {status === "loading" ? (
+              <LoaderCircle size={56} className="ibbi-confirm-spin" />
+            ) : status === "ok" ? (
+              <BadgeCheck size={56} />
+            ) : (
+              <CircleX size={56} />
+            )}
           </div>
-        </div>
-      </section>
 
-      <section className="ibbi-section" style={{ padding: "60px 0 100px" }}>
-        <div className="ibbi-container" style={{ maxWidth: 600 }}>
-          <div className="ibbi-checkout-success-card">
-            <div className={`ibbi-checkout-success-icon ${status === "error" ? "ibbi-checkout-success-icon--pending" : ""}`}>
-              {status === "loading" ? <Clock size={64} /> : <MailCheck size={64} />}
+          <h1 className="ibbi-confirm-title">{copy.title}</h1>
+          <p className="ibbi-confirm-text">{copy.text}</p>
+
+          {status !== "loading" && (
+            <div className="ibbi-confirm-actions">
+              <a href={`/login${redirectQuery}`} className="ibbi-btn ibbi-btn--primary ibbi-confirm-btn">
+                {status === "ok" ? "FAZER LOGIN" : "IR PARA O LOGIN"}
+              </a>
+              <a href="/" className="ibbi-confirm-link">
+                Voltar para a página inicial
+              </a>
             </div>
-            <h2>{message}</h2>
-
-            <div className="ibbi-checkout-success-divider" />
-
-            <a href={`/login${redirectQuery}`} className="ibbi-btn ibbi-btn--primary ibbi-btn--full">
-              FAZER LOGIN
-            </a>
-
-            <a href="/" className="ibbi-checkout-success-link">
-              Voltar para a página inicial
-            </a>
-          </div>
+          )}
         </div>
       </section>
     </main>

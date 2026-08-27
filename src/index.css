@@ -1264,6 +1264,7 @@ ul, ol { list-style: none; }
   line-height: 1.1;
   letter-spacing: -0.02em;
   margin-bottom: 16px;
+  text-align: center;
 }
 .ibbi-event-hero-meta {
   display: flex;

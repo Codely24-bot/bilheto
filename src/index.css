@@ -1256,6 +1256,7 @@ ul, ol { list-style: none; }
 }
 .ibbi-event-hero-info {
   padding: 20px 0;
+  text-align: center;
 }
 .ibbi-event-hero-info h1 {
   font-size: clamp(28px, 3.5vw, 42px);
@@ -1268,6 +1269,7 @@ ul, ol { list-style: none; }
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 16px;
   font-size: 14px;
   color: var(--gray);

@@ -37,7 +37,23 @@ export function Doacoes() {
                 <QrCode size={40} />
               </div>
               <h3>PIX para doação</h3>
-              <p className="ibbi-doacoes-aside-desc">Copie a chave PIX abaixo e faça a transferência pelo aplicativo do seu banco.</p>
+              <p className="ibbi-doacoes-aside-desc">Escaneie o QR Code abaixo ou copie a chave PIX e faça a transferência pelo aplicativo do seu banco.</p>
+
+              <div style={{ textAlign: "center", padding: "16px 0" }}>
+                <img
+                  src="/PIX%20QR%20CODE.png"
+                  alt="QR Code PIX"
+                  style={{
+                    display: "block",
+                    margin: "0 auto",
+                    width: "100%",
+                    maxWidth: 240,
+                    borderRadius: 12,
+                    border: "2px solid var(--gold, #D6A13A)",
+                  }}
+                />
+              </div>
+
               <div className="ibbi-doacoes-pix-box">
                 <span className="ibbi-doacoes-pix-key">{PIX_KEY}</span>
                 <button className="ibbi-doacoes-pix-copy" onClick={copyPix}>

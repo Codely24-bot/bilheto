@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, Copy, CheckCircle, Eye, EyeOff, MailCheck } from "lucide-react";
+import { Copy, CheckCircle, Eye, EyeOff, MailCheck } from "lucide-react";
 import { useAuth, registerUser } from "../lib/auth";
 import { createOrder } from "../services/orders";
 import { demoEvents } from "../data/demo";
@@ -214,9 +214,6 @@ export function Checkout({ slug }: { slug: string }) {
         <div className="ibbi-container">
           <div className="ibbi-event-hero-inner">
             <div className="ibbi-event-hero-info">
-              <a href={`/evento/${slug}`} className="ibbi-event-back">
-                <ArrowLeft size={15} /> Voltar para o evento
-              </a>
               <span className="section-label">Inscrição</span>
               <h1>Comprar ingresso</h1>
             </div>

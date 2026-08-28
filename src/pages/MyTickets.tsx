@@ -4,6 +4,8 @@ import { useAuth, logoutUser } from "../lib/auth";
 import { getUserOrders } from "../services/orders";
 import { longDate, statusLabel } from "../lib/format";
 
+const WHATSAPP_NUMBER = "31972562337";
+
 type TicketRow = {
   id: string;
   code: string;
@@ -126,8 +128,16 @@ export function MyTickets() {
                       Aguardando confirmação de pagamento
                     </p>
                     <div className="ibbi-ticket-card-footer">
-                      <a href="/doacoes" className="ibbi-btn ibbi-btn--primary ibbi-btn--small" style={{ textDecoration: "none" }}>
-                        Ver detalhes
+                      <a
+                        href={`https://wa.me/55${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+                          `Olá! Fiz o pedido #${order.id.slice(0, 8)} e quero enviar o comprovante de pagamento.`
+                        )}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ibbi-btn ibbi-btn--primary ibbi-btn--small"
+                        style={{ textDecoration: "none" }}
+                      >
+                        ENVIAR COMPROVANTE
                       </a>
                     </div>
                   </div>

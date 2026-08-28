@@ -2589,6 +2589,66 @@ ul, ol { list-style: none; }
   .ibbi-ticket-detail { padding: 20px; }
 }
 
+/* ── Ticket print (PDF de 1 página) ────────────── */
+.ibbi-print-ticket { display: none; }
+
+@media print {
+  @page { size: auto; margin: 10mm; }
+  body > *:not(.ibbi-print-ticket) { display: none !important; }
+  .ibbi-print-ticket {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+  .ibbi-print-ticket-card {
+    width: 100%;
+    max-width: 380px;
+    padding: 24px;
+    text-align: center;
+    border: 2px solid #D6A13A;
+    border-radius: 16px;
+    background: #fff;
+  }
+  .ibbi-print-ticket-brand {
+    margin: 0 0 4px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #D6A13A;
+  }
+  .ibbi-print-ticket-event {
+    margin: 0 0 16px;
+    font-size: 18px;
+    font-weight: 800;
+    color: #071116;
+  }
+  .ibbi-print-ticket-name {
+    margin: 0 0 12px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #071116;
+  }
+  .ibbi-print-ticket-qr {
+    display: flex;
+    justify-content: center;
+    padding: 12px 0;
+  }
+  .ibbi-print-ticket-code {
+    margin: 8px 0 0;
+    font-size: 13px;
+    color: #555;
+  }
+  .ibbi-print-ticket-code strong {
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.06em;
+    color: #071116;
+  }
+}
+
 /* ── Floating event button ──────────────────────── */
 .ibbi-event-float {
   position: fixed;

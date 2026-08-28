@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { QRCodeSVG } from "qrcode.react";
 import { ArrowLeft, Download, CalendarDays, MapPin, User, Tag } from "lucide-react";
 import { supabase } from "../lib/supabase";
@@ -83,7 +84,6 @@ export function TicketPage({ token }: { token: string }) {
   const address = ticket.events?.address ?? "";
   const attendeeName = ticket.attendees?.name ?? "";
   const ticketType = ticket.ticket_batches?.ticket_types?.name ?? "";
-  const batchName = ticket.ticket_batches?.name ?? "";
 
   return (
     <main>
@@ -127,7 +127,7 @@ export function TicketPage({ token }: { token: string }) {
                 <Tag size={16} />
                 <div>
                   <span className="ibbi-ticket-detail-label">Tipo</span>
-                  <strong>{ticketType} — {batchName}</strong>
+                  <strong>{ticketType}</strong>
                 </div>
               </div>
               <div className="ibbi-ticket-detail-row">
@@ -163,6 +163,23 @@ export function TicketPage({ token }: { token: string }) {
           </div>
         </div>
       </section>
+
+      {createPortal(
+        <div className="ibbi-print-ticket">
+          <div className="ibbi-print-ticket-card">
+            <p className="ibbi-print-ticket-brand">Casa IBBI</p>
+            <h1 className="ibbi-print-ticket-event">{eventName}</h1>
+            <p className="ibbi-print-ticket-name">{attendeeName}</p>
+            <div className="ibbi-print-ticket-qr">
+              <QRCodeSVG value={ticket.token} size={200} bgColor="#FFFFFF" fgColor="#071116" />
+            </div>
+            <p className="ibbi-print-ticket-code">
+              Nº do ingresso: <strong>{ticket.code}</strong>
+            </p>
+          </div>
+        </div>,
+        document.body
+      )}
     </main>
   );
 }

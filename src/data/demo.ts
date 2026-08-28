@@ -15,7 +15,7 @@ export const demoEvents: Event[] = [
     startDate: "2026-09-19T19:00:00-03:00",
     endDate: "2026-09-19T22:00:00-03:00",
     venueName: "IBBI – Igreja Batista do Bairro Industrial",
-    address: "R. Nascimento Teixeira, 660 - Industrial, Contagem - MG, 32235-300, Brasil",
+    address: "R. Cel. Gabriel de Andrade, 735 – Industrial, Contagem – MG",
     city: "Contagem",
     state: "MG",
     ageRating: "Livre",
@@ -68,7 +68,7 @@ export const demoTickets: Ticket[] = [
     ticketType: "CASAL",
     batchName: "Lote único",
 date: "19 set 2026, 19:00",
-    venue: "IBBI – Igreja Batista do Bairro Industrial — R. Nascimento Teixeira, 660 - Industrial, Contagem - MG, 32235-300, Brasil",
+    venue: "IBBI – Igreja Batista do Bairro Industrial — R. Cel. Gabriel de Andrade, 735 – Industrial, Contagem – MG",
     status: "valid",
     checkedIn: false
   }

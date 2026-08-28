@@ -18,11 +18,11 @@ export const siteConfig = {
   },
 
   address: {
-    street: "R. Cel. Gabriel de Andrade, 735",
+    street: "R. Nascimento Teixeira, 660",
     neighborhood: "Industrial",
     city: "Contagem",
     state: "MG",
-    full: "R. Cel. Gabriel de Andrade, 735 – Industrial, Contagem – MG",
+    full: "R. Nascimento Teixeira, 660 - Industrial, Contagem - MG, 32235-300, Brasil",
     googleMapsUrl:
       "https://www.google.com/maps/place/Igreja+Batista+do+Bairro+Industrial/@-19.9771486,-44.037031,818m/data=!3m1!1e3!4m6!3m5!1s0xa6be421d813c31:0xdcec19086c1ea259!8m2!3d-19.9771486!4d-44.037031!16s%2Fg%2F1tlwgwl5",
     embedUrl:
@@ -95,7 +95,7 @@ export const siteConfig = {
       icon: "MapPin",
       title: "VISITE-NOS",
       lines: [
-        "R. Cel. Gabriel de Andrade, 735",
+        "R. Nascimento Teixeira, 660",
         "Bairro Industrial",
         "Contagem – MG",
       ],

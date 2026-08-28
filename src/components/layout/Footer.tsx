@@ -40,7 +40,7 @@ export function Footer() {
           <div className="footer-address">
             <h4>Localização</h4>
             <address>
-              R. Cel. Gabriel de Andrade, 735<br />
+              R. Nascimento Teixeira, 660<br />
               Industrial – Contagem/MG
             </address>
             <div className="footer-map">

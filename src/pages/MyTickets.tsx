@@ -51,7 +51,7 @@ function ticketEventDate(order: OrderRow) {
 
 function ticketEventLocation(order: OrderRow) {
   return order.events?.address
-    || "R. Nascimento Teixeira, 660 - Industrial, Contagem - MG, 32235-300, Brasil";
+    || "R. Cel. Gabriel de Andrade, 735 – Industrial, Contagem – MG";
 }
 
 export function MyTickets() {

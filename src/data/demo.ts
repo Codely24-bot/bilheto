@@ -32,7 +32,7 @@ export const demoEvents: Event[] = [
         price: 100,
         quantity: 70,
         quantitySold: 0,
-        maxPerOrder: 2,
+        maxPerOrder: 1,
         salesStart: "2026-08-21T09:00:00-03:00",
         salesEnd: "2026-09-19T18:00:00-03:00",
         status: "available"

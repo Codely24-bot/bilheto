@@ -23,7 +23,7 @@ export function Checkout({ slug }: { slug: string }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [cartItems, setCartItems] = useState<CartLine[]>([{ batchId: batch.id, quantity: 1 }]);
+  const [cartItems] = useState<CartLine[]>([{ batchId: batch.id, quantity: 1 }]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [order, setOrder] = useState<any>(null);
@@ -294,7 +294,7 @@ export function Checkout({ slug }: { slug: string }) {
                 <span>{event.city} - {event.state}</span>
               </div>
               <div style={{ borderTop: "1px solid var(--border, #1a2e36)", paddingTop: 16, marginTop: 16 }}>
-                <TicketSelector event={event} items={cartItems} onChange={setCartItems} />
+                <TicketSelector event={event} />
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: 18, fontWeight: 700, marginTop: 12 }}>
                   <span>Total</span>
                   <span>{brl(total)}</span>

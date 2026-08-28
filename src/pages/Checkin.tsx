@@ -187,7 +187,7 @@ export function Checkin() {
             {checkResult.valid ? <CheckCircle2 size={46} /> : <XCircle size={46} />}
             <h2>{checkResult.valid ? checkResult.message || "INGRESSO VÁLIDO" : checkResult.message}</h2>
             {checkResult.attendeeName && <p>Casal: <strong>{checkResult.attendeeName}</strong></p>}
-            {checkResult.ticketType && <p>Ingresso: <strong>{checkResult.ticketType} - {checkResult.batchName}</strong></p>}
+            {checkResult.ticketType && <p>Ingresso: <strong>{checkResult.ticketType}</strong></p>}
             {checkResult.code && <p>Código: <strong>{checkResult.code}</strong></p>}
 
             <div className="ibbi-checkin-result-actions">

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import { ArrowLeft, Download, CalendarDays, MapPin, User, Tag } from "lucide-react";
 import { supabase } from "../lib/supabase";
-import { longDate } from "../lib/format";
+import { longDate, statusLabel } from "../lib/format";
 
 type TicketData = {
   id: string;
@@ -107,7 +107,7 @@ export function TicketPage({ token }: { token: string }) {
             <div className="ibbi-ticket-detail-header">
               <img src="/logo-casa-ibbi.svg" alt="Casa IBBI" className="ibbi-ticket-detail-logo" />
               <span className={`ibbi-ticket-detail-badge ibbi-ticket-detail-badge--${ticket.status === "valid" ? "valid" : "invalid"}`}>
-                {ticket.status === "valid" ? "VÁLIDO" : ticket.status === "used" ? "UTILIZADO" : ticket.status.toUpperCase()}
+                {ticket.status === "valid" ? "VÁLIDO" : ticket.status === "used" ? "UTILIZADO" : statusLabel(ticket.status).toUpperCase()}
               </span>
             </div>
 

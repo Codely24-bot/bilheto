@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { LogOut, Ticket, CalendarDays, MapPin, Clock, ChevronRight } from "lucide-react";
 import { useAuth, logoutUser } from "../lib/auth";
 import { getUserOrders } from "../services/orders";
-import { longDate } from "../lib/format";
+import { longDate, statusLabel } from "../lib/format";
 
 type TicketRow = {
   id: string;
@@ -149,7 +149,7 @@ export function MyTickets() {
                       <div className="ibbi-ticket-card-item">
                         <div className="ibbi-ticket-card-status">
                           <span className={`ibbi-ticket-badge ibbi-ticket-badge--${ticket.status === "valid" ? "valid" : "invalid"}`}>
-                            {ticket.status === "valid" ? "VÁLIDO" : ticket.status === "used" ? "UTILIZADO" : ticket.status.toUpperCase()}
+                            {ticket.status === "valid" ? "VÁLIDO" : ticket.status === "used" ? "UTILIZADO" : statusLabel(ticket.status).toUpperCase()}
                           </span>
                         </div>
                         <h3 className="ibbi-ticket-card-title">{ticketEventTitle(order)}</h3>

@@ -8,7 +8,7 @@ export const demoEvents: Event[] = [
     slug: "aprendendo-a-ser-parceiros",
     description:
       "Um encontro especial para casais que desejam crescer juntos, fortalecer a comunhão e aprender na prática a construir uma parceria verdadeira para a vida. Será uma noite de conexão, aprendizado e renovação, com uma palavra para fortalecer o relacionamento e a caminhada a dois.\n\nProgramação\n\n• Recepção e acolhimento dos casais\n• Palestra: Aprendendo a Ser Parceiros - Pastor Ronaldo Morais e Mariza Morais\n• Jantar especial para os casais\n• Momento de comunhão e conexão\n\nImportante: Este é um evento exclusivo para casais. Não será permitida a participação de crianças.",
-    category: "Workshops",
+    category: "Oficinas",
     coverUrl: "/evento-parceiros.jpg",
     mobileCoverUrl: "/evento-parceiros.jpg",
     posterUrl: "/evento-parceiros.jpg",

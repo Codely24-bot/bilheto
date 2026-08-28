@@ -141,6 +141,6 @@ function traduzirErro(msg: string): string {
   if (msg.includes("Unable to validate email address")) return "E-mail inválido.";
   if (msg.includes("Password should be at least")) return "A senha precisa ter pelo menos 6 caracteres.";
   if (msg.includes("Email rate limit exceeded")) return "Muitas tentativas. Aguarde alguns minutos.";
-  if (msg.includes("Signup requires")) return "Cadastros estão temporariamente indisponíveis.";
+  if (msg.includes("Signup not allowed") || msg.includes("Signup requires")) return "Cadastros estão temporariamente indisponíveis. Tente novamente mais tarde.";
   return msg;
 }

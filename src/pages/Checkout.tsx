@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Copy, CheckCircle, Eye, EyeOff, MailCheck } from "lucide-react";
+import { Copy, CheckCircle, Eye, EyeOff } from "lucide-react";
 import { useAuth, registerUser } from "../lib/auth";
 import { createOrder } from "../services/orders";
 import { demoEvents } from "../data/demo";
@@ -28,7 +28,6 @@ export function Checkout({ slug }: { slug: string }) {
   const [error, setError] = useState("");
   const [order, setOrder] = useState<any>(null);
   const [copied, setCopied] = useState(false);
-  const [pendingConfirm, setPendingConfirm] = useState("");
 
   const quantity = cartItems.find((i) => i.batchId === batch.id)?.quantity ?? 0;
   const total = batch.price * quantity;
@@ -55,14 +54,10 @@ export function Checkout({ slug }: { slug: string }) {
       if (password !== confirmPassword) { setError("As senhas não coincidem."); return; }
 
       setLoading(true);
-      const result = await registerUser(coupleName.trim(), email.trim(), password, `/checkout/${slug}`);
+      const result = await registerUser(coupleName.trim(), email.trim(), password);
       setLoading(false);
 
       if (!result.ok) {
-        if (result.error === "__CONFIRM_EMAIL__") {
-          setPendingConfirm(email.trim());
-          return;
-        }
         setError(result.error ?? "Não foi possível criar a conta.");
         return;
       }
@@ -91,43 +86,6 @@ export function Checkout({ slug }: { slug: string }) {
     } finally {
       setLoading(false);
     }
-  }
-
-  if (pendingConfirm) {
-    const redirectTo = `/login?redirect=${encodeURIComponent(`/checkout/${slug}`)}`;
-    return (
-      <main>
-        <section className="ibbi-event-hero ibbi-checkout-hero">
-          <div className="ibbi-container">
-            <div className="ibbi-event-hero-inner">
-              <div className="ibbi-event-hero-info">
-                <span className="section-label">Confirmação de e-mail</span>
-                <h1>Conta criada!</h1>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="ibbi-section" style={{ padding: "60px 0 100px" }}>
-          <div className="ibbi-container" style={{ maxWidth: 500, margin: "0 auto" }}>
-            <div className="ibbi-checkout-success-card">
-              <MailCheck size={64} style={{ color: "var(--gold, #D6A13A)" }} />
-              <h2>Veja seu e-mail</h2>
-              <p style={{ color: "#A6ADAF", textAlign: "center" }}>
-                Enviamos um link de confirmação para <strong style={{ color: "#fff" }}>{pendingConfirm}</strong>. Confirme seu e-mail e depois faça login para concluir a compra.
-              </p>
-              <div className="ibbi-checkout-success-divider" />
-              <a href={redirectTo} className="ibbi-btn ibbi-btn--primary ibbi-btn--full" style={{ marginTop: 16 }}>
-                IR PARA LOGIN
-              </a>
-              <a href="/" className="ibbi-checkout-success-link">
-                Voltar para a página inicial
-              </a>
-            </div>
-          </div>
-        </section>
-      </main>
-    );
   }
 
   if (order) {

@@ -14,7 +14,7 @@ const copy: Record<Mode, { title: string; subtitle: string; action: string }> = 
 };
 
 export function Login({ mode = "login" }: { mode?: Mode }) {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "", confirmPassword: "" });
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -44,12 +44,9 @@ export function Login({ mode = "login" }: { mode?: Mode }) {
 
     try {
       if (mode === "signup") {
-        const result = await registerUser(form.name, form.email, form.password, userRedirect);
+        if (form.password !== form.confirmPassword) return setError("As senhas não coincidem.");
+        const result = await registerUser(form.name, form.email, form.password);
         if (!result.ok) return setError(result.error ?? "Não foi possível criar a conta.");
-        if (result.error === "__CONFIRM_EMAIL__") {
-          setNotice("Conta criada! Verifique seu e-mail para confirmar o cadastro.");
-          return;
-        }
         navigate(userRedirect);
         return;
       }
@@ -170,6 +167,20 @@ export function Login({ mode = "login" }: { mode?: Mode }) {
                         {showPassword ? <EyeOff size={19} /> : <Eye size={19} />}
                       </button>
                     </div>
+                  </div>
+                )}
+
+                {mode === "signup" && (
+                  <div className="ibbi-checkout-field">
+                    <label className="ibbi-checkout-label"><LockKeyhole size={14} /> Confirmar senha</label>
+                    <input
+                      className="ibbi-checkout-input"
+                      placeholder="Repita a senha"
+                      type={showPassword ? "text" : "password"}
+                      autoComplete="new-password"
+                      value={form.confirmPassword}
+                      onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
+                    />
                   </div>
                 )}
 

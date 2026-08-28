@@ -74,7 +74,6 @@ export function EventPage({ slug }: { slug: string }) {
               <h2>{event.title}</h2>
               <div className="ibbi-checkout-event-meta">
                 <span>{event.address}</span>
-                <span>{event.city} - {event.state}</span>
               </div>
               <a
                 href={buyHref}

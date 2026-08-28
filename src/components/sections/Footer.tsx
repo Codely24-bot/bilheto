@@ -49,9 +49,23 @@ export function Footer() {
 
           <div className="ibbi-footer-col">
             <h4>Informações</h4>
-            <span>{siteConfig.address.full}</span>
+            <a href={siteConfig.address.googleMapsUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+              {siteConfig.address.full}
+            </a>
             {siteConfig.contact.phone && <span>{siteConfig.contact.phone}</span>}
             {siteConfig.contact.email && <span>{siteConfig.contact.email}</span>}
+            <div style={{ marginTop: 10 }}>
+              <iframe
+                title="Mapa da localização"
+                src={siteConfig.address.embedUrl}
+                width="100%"
+                height="150"
+                style={{ border: 0, borderRadius: 6 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
           </div>
         </div>
 

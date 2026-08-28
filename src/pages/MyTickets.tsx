@@ -155,7 +155,7 @@ export function MyTickets() {
               <div className="ibbi-tickets-grid">
                 {confirmedOrders.map((order) =>
                   order.tickets.map((ticket) => (
-                    <a href={`/ingresso/${ticket.token}`} className="ibbi-ticket-card-link" key={ticket.id}>
+                    <div className="ibbi-ticket-card-link" key={ticket.id}>
                       <div className="ibbi-ticket-card-item">
                         <div className="ibbi-ticket-card-status">
                           <span className={`ibbi-ticket-badge ibbi-ticket-badge--${ticket.status === "valid" ? "valid" : "invalid"}`}>
@@ -176,12 +176,19 @@ export function MyTickets() {
                         </div>
                         <div className="ibbi-ticket-card-footer">
                           <span className="ibbi-ticket-card-code">{ticket.code}</span>
-                          <span className="ibbi-ticket-card-action">
+                          <a href={`/ingresso/${ticket.token}`} className="ibbi-ticket-card-action">
                             Ver ingresso <ChevronRight size={16} />
-                          </span>
+                          </a>
                         </div>
+                        <a
+                          href={`/ingresso/${ticket.token}`}
+                          className="ibbi-btn ibbi-btn--primary ibbi-btn--small ibbi-btn--full"
+                          style={{ marginTop: 4, justifyContent: "center", textDecoration: "none" }}
+                        >
+                          VER INGRESSO
+                        </a>
                       </div>
-                    </a>
+                    </div>
                   ))
                 )}
               </div>

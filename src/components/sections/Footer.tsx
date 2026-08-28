@@ -49,9 +49,6 @@ export function Footer() {
 
           <div className="ibbi-footer-col">
             <h4>Informações</h4>
-            <a href={siteConfig.address.googleMapsUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
-              {siteConfig.address.full}
-            </a>
             {siteConfig.contact.phone && <span>{siteConfig.contact.phone}</span>}
             {siteConfig.contact.email && <span>{siteConfig.contact.email}</span>}
             <div style={{ marginTop: 10 }}>

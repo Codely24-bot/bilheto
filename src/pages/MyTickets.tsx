@@ -50,8 +50,8 @@ function ticketEventDate(order: OrderRow) {
 }
 
 function ticketEventLocation(order: OrderRow) {
-  return [order.events?.venue_name, order.events?.address].filter(Boolean).join(" — ")
-    || "IBBI – Igreja Batista do Bairro Industrial — R. Cel. Gabriel de Andrade, 735 – Industrial, Contagem – MG";
+  return order.events?.address
+    || "R. Cel. Gabriel de Andrade, 735 – Industrial, Contagem – MG";
 }
 
 export function MyTickets() {

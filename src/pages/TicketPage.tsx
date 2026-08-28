@@ -141,7 +141,7 @@ export function TicketPage({ token }: { token: string }) {
                 <MapPin size={16} />
                 <div>
                   <span className="ibbi-ticket-detail-label">Local</span>
-                  <strong>{venueName}{address ? ` — ${address}` : ""}</strong>
+                  <strong>{address || venueName}</strong>
                 </div>
               </div>
             </div>

@@ -22,7 +22,7 @@ export function EventPage({ slug }: { slug: string }) {
                   <CalendarDays size={16} /> {longDate(event.startDate)}
                 </span>
                 <span className="ibbi-event-hero-meta-item">
-                  <MapPin size={16} /> {event.venueName}
+                  <MapPin size={16} /> {event.address}
                 </span>
                 <span className="ibbi-event-hero-meta-item">
                   <Users size={16} /> {event.ageRating}
@@ -73,7 +73,7 @@ export function EventPage({ slug }: { slug: string }) {
               </div>
               <h2>{event.title}</h2>
               <div className="ibbi-checkout-event-meta">
-                <span>{event.venueName}</span>
+                <span>{event.address}</span>
                 <span>{event.city} - {event.state}</span>
               </div>
               <a

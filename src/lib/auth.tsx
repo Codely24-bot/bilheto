@@ -103,12 +103,23 @@ export async function loginUser(email: string, password: string): Promise<{ ok: 
   if (!supabase) return { ok: false, error: "Banco de dados não conectado." };
   if (!email.trim() || !password) return { ok: false, error: "Preencha e-mail e senha." };
 
+  const normalizedEmail = email.trim().toLowerCase();
+
   const { data, error } = await supabase.auth.signInWithPassword({
-    email: email.trim().toLowerCase(),
+    email: normalizedEmail,
     password,
   });
 
-  if (error) return { ok: false, error: traduzirErro(error.message) };
+  if (error) {
+    if (error.message.includes("Invalid login credentials")) {
+      const { data: registered } = await supabase.rpc("email_exists", { p_email: normalizedEmail });
+      if (registered === false) {
+        return { ok: false, error: "Você não tem cadastro. Cadastre-se para continuar." };
+      }
+      return { ok: false, error: "E-mail ou senha incorretos." };
+    }
+    return { ok: false, error: traduzirErro(error.message) };
+  }
 
   const { data: profile } = await supabase
     .from("profiles")

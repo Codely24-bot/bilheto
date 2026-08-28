@@ -87,7 +87,7 @@ export function TicketPage({ token }: { token: string }) {
 
   return (
     <main>
-      <section className="ibbi-event-hero" style={{ minHeight: 260, maxHeight: 260 }}>
+      <section className="ibbi-event-hero ibbi-simple-hero">
         <div className="ibbi-container">
           <div className="ibbi-event-hero-inner">
             <div className="ibbi-event-hero-info">

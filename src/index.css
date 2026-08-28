@@ -2757,6 +2757,29 @@ ul, ol { list-style: none; }
 .ibbi-admin-checkin { text-align: center; }
 .ibbi-event-back { text-align: left !important; justify-content: flex-start !important; }
 
+/* Simple hero (Casa IBBI / Seu ingresso): single centered column, never clipped */
+.ibbi-simple-hero {
+  display: flex;
+  align-items: center;
+  min-height: 260px;
+  max-height: none;
+  overflow: hidden;
+}
+.ibbi-simple-hero .ibbi-event-hero-inner {
+  grid-template-columns: 1fr;
+  align-items: center;
+  justify-items: center;
+  width: 100%;
+  padding: 96px 0 64px;
+}
+.ibbi-simple-hero .ibbi-event-hero-info {
+  padding: 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 /* Checkout hero: allow natural height and center content so the title is never clipped */
 .ibbi-checkout-hero {
   display: flex;
@@ -2877,6 +2900,12 @@ ul, ol { list-style: none; }
   .ibbi-checkout-hero .ibbi-event-hero-inner { padding: 56px 0 32px !important; }
   .ibbi-checkout-hero .ibbi-event-hero-info h1 { font-size: 26px !important; }
   .ibbi-checkout-hero .ibbi-event-back { margin-bottom: 12px !important; }
+
+  /* Simple hero → never clip the title */
+  .ibbi-simple-hero { min-height: 220px !important; max-height: none !important; }
+  .ibbi-simple-hero .ibbi-event-hero-inner { padding: 56px 0 32px !important; }
+  .ibbi-simple-hero .ibbi-event-hero-info h1 { font-size: 26px !important; }
+  .ibbi-simple-hero .ibbi-event-back { margin-bottom: 12px !important; }
 
   /* Event page → stacked */
   .ibbi-event-sidebar { padding: 16px !important; border-radius: 12px !important; }

@@ -14,7 +14,7 @@ export function Services() {
           {siteConfig.serviceTimes.map((s, i) => (
             <div key={i} className="ibbi-service-card">
               <span className="ibbi-service-card-day">{s.day}</span>
-              <h3>Culto Rio Da Vida</h3>
+              <h3>Culto de Celebração</h3>
               <div className="ibbi-service-card-time">
                 <Clock size={20} /> {s.time}
               </div>

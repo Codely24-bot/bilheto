@@ -3,7 +3,7 @@ import { siteConfig } from "../../data/siteConfig";
 
 export function Location() {
   const servicesText = siteConfig.serviceTimes
-    .map((s) => `${s.day}: Culto Rio Da Vida às ${s.time}`)
+    .map((s) => `${s.day}: Culto de Celebração às ${s.time}`)
     .join("\n");
 
   return (

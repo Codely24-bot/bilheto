@@ -1,19 +1,21 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { AuthProvider, useAuth } from "./lib/auth";
 import { Header } from "./components/sections/Header";
 import { Footer } from "./components/sections/Footer";
 import { WhatsAppButton } from "./components/sections/WhatsApp";
 import { BackToTop } from "./components/sections/BackToTop";
-import { Home } from "./pages/Home";
-import { Login } from "./pages/AuthPages";
-import { Checkin } from "./pages/Checkin";
-import { Checkout } from "./pages/Checkout";
-import { EventPage } from "./pages/EventPage";
-import { MyTickets } from "./pages/MyTickets";
-import { TicketPage } from "./pages/TicketPage";
-import { Admin } from "./pages/Admin";
-import { Doacoes } from "./pages/Doacoes";
-import { EmailConfirmed, ResetPasswordPage } from "./pages/StatusPages";
+
+const Home = lazy(() => import("./pages/Home").then((module) => ({ default: module.Home })));
+const Login = lazy(() => import("./pages/AuthPages").then((module) => ({ default: module.Login })));
+const Checkin = lazy(() => import("./pages/Checkin").then((module) => ({ default: module.Checkin })));
+const Checkout = lazy(() => import("./pages/Checkout").then((module) => ({ default: module.Checkout })));
+const EventPage = lazy(() => import("./pages/EventPage").then((module) => ({ default: module.EventPage })));
+const MyTickets = lazy(() => import("./pages/MyTickets").then((module) => ({ default: module.MyTickets })));
+const TicketPage = lazy(() => import("./pages/TicketPage").then((module) => ({ default: module.TicketPage })));
+const Admin = lazy(() => import("./pages/Admin").then((module) => ({ default: module.Admin })));
+const Doacoes = lazy(() => import("./pages/Doacoes").then((module) => ({ default: module.Doacoes })));
+const EmailConfirmed = lazy(() => import("./pages/StatusPages").then((module) => ({ default: module.EmailConfirmed })));
+const ResetPasswordPage = lazy(() => import("./pages/StatusPages").then((module) => ({ default: module.ResetPasswordPage })));
 
 function useRouter() {
   const [path, setPath] = useState(location.pathname + location.search);
@@ -64,6 +66,14 @@ function Redirect({ to }: { to: string }) {
     window.scrollTo(0, 0);
   }, [to]);
   return null;
+}
+
+function PageLoader() {
+  return (
+    <div style={{ minHeight: "50vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#071116" }}>
+      <p style={{ color: "#A6ADAF", fontSize: 16, fontFamily: "Inter, sans-serif" }}>Carregando...</p>
+    </div>
+  );
 }
 
 function safeRedirectFrom(fullPath: string) {
@@ -126,7 +136,9 @@ function AppRoutes() {
   return (
     <>
       <Header />
-      {page}
+      <Suspense fallback={<PageLoader />}>
+        {page}
+      </Suspense>
       <Footer />
       <WhatsAppButton />
       <BackToTop />
@@ -137,7 +149,9 @@ function AppRoutes() {
 function App() {
   return (
     <AuthProvider>
-      <AppRoutes />
+      <Suspense fallback={<PageLoader />}>
+        <AppRoutes />
+      </Suspense>
     </AuthProvider>
   );
 }

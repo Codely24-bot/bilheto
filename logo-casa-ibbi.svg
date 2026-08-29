@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 120" width="480" height="120" role="img" aria-label="Casa IBBI">
+  <g fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 58 L66 24 L110 58" />
+    <path d="M36 52 V98 H96 V52" />
+    <path d="M57 98 V72 H75 V98" />
+  </g>
+  <text x="132" y="78" font-family="'Segoe UI', Arial, Helvetica, sans-serif" font-size="54" letter-spacing="2">
+    <tspan font-weight="300" fill="#ffffff">CASA </tspan>
+    <tspan font-weight="800" fill="#ffffff">IBBI</tspan>
+  </text>
+</svg>

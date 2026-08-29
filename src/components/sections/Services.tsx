@@ -2,6 +2,8 @@ import { Clock, ArrowRight } from "lucide-react";
 import { siteConfig } from "../../data/siteConfig";
 
 export function Services() {
+  const getServiceName = (day: string) => day === "Terça-feira" ? "Culto Rio da Vida" : "Culto de Celebração";
+
   return (
     <section className="ibbi-section ibbi-services-bg" id="cultos">
       <div className="ibbi-container">
@@ -14,7 +16,7 @@ export function Services() {
           {siteConfig.serviceTimes.map((s, i) => (
             <div key={i} className="ibbi-service-card">
               <span className="ibbi-service-card-day">{s.day}</span>
-              <h3>Culto de Celebração</h3>
+              <h3>{getServiceName(s.day)}</h3>
               <div className="ibbi-service-card-time">
                 <Clock size={20} /> {s.time}
               </div>

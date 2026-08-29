@@ -2,8 +2,9 @@ import { MapPin, Phone, Mail, Clock, ArrowRight } from "lucide-react";
 import { siteConfig } from "../../data/siteConfig";
 
 export function Location() {
+  const getServiceName = (day: string) => day === "Terça-feira" ? "Culto Rio da Vida" : "Culto de Celebração";
   const servicesText = siteConfig.serviceTimes
-    .map((s) => `${s.day}: Culto de Celebração às ${s.time}`)
+    .map((s) => `${s.day}: ${getServiceName(s.day)} às ${s.time}`)
     .join("\n");
 
   return (

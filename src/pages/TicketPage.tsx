@@ -79,7 +79,7 @@ export function TicketPage({ token }: { token: string }) {
   }
 
   const eventName = ticket.events?.title ?? "Evento";
-  const startDate = ticket.events?.start_date ?? "";
+  const startDate = ticket.events?.start_date ?? "2026-09-19T19:00:00-03:00";
   const venueName = ticket.events?.venue_name ?? "";
   const address = ticket.events?.address ?? "";
   const attendeeName = ticket.attendees?.name ?? "";

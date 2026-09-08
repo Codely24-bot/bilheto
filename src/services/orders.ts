@@ -1,4 +1,5 @@
 import { supabase } from "../lib/supabase";
+import { buildTicketEmailHtml } from "./emailTemplate";
 
 type CreateOrderInput = {
   userId: string;
@@ -206,14 +207,17 @@ export async function sendTicketEmail(orderId: string) {
 
   if (!tickets || tickets.length === 0) throw new Error("Nenhum ingresso encontrado.");
 
-  const ticketLinks = tickets
-    .map((t) => `  - ${t.code}: ${window.location.origin}/ingresso/${t.token}`)
-    .join("\n");
+  const htmlLinks = tickets.map((t) => ({
+    code: t.code,
+    url: `${window.location.origin}/ingresso/${t.token}`,
+  }));
 
   const subject = encodeURIComponent(`Seu ingresso - Casa IBBI`);
-  const body = encodeURIComponent(
-    `Olá ${order.buyer_name}!\n\nSeu pagamento foi confirmado!\n\nSeus ingressos:\n${ticketLinks}\n\nApresente o QR Code na entrada do evento.\n\nCasa IBBI`
-  );
+  const body = encodeURIComponent(buildTicketEmailHtml(order.buyer_name, htmlLinks));
+  const cc = encodeURIComponent("matrizibbi@matrizriodavida.com");
 
-  window.open(`mailto:${order.buyer_email}?subject=${subject}&body=${body}`, "_blank");
+  window.open(
+    `mailto:${order.buyer_email}?cc=${cc}&subject=${subject}&body=${body}`,
+    "_blank"
+  );
 }

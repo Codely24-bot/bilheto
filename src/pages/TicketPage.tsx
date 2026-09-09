@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { QRCodeSVG } from "qrcode.react";
+import { jsPDF } from "jspdf";
 import { ArrowLeft, Download, CalendarDays, MapPin, User, Tag, MessageCircle } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { longDate, statusLabel } from "../lib/format";
@@ -101,6 +102,100 @@ export function TicketPage({ token }: { token: string }) {
       )}`
     : null;
 
+  async function shareTicketPdf() {
+    let qrDataUrl = "";
+
+    const qrSvg = document.querySelector<SVGSVGElement>(".ibbi-print-ticket-qr svg");
+    if (qrSvg) {
+      const svgSrc = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(new XMLSerializer().serializeToString(qrSvg))}`;
+      const img = new Image();
+      await new Promise<void>((resolve, reject) => {
+        img.onload = () => resolve();
+        img.onerror = () => reject(new Error("Falha ao gerar o QR Code."));
+        img.src = svgSrc;
+      });
+      const canvas = document.createElement("canvas");
+      const size = 600;
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, size, size);
+        ctx.drawImage(img, 0, 0, size, size);
+        qrDataUrl = canvas.toDataURL("image/png");
+      }
+    }
+
+    const width = 100;
+    const height = 150;
+    const pdf = new jsPDF({ unit: "mm", format: [width, height], orientation: "portrait" });
+
+    pdf.setDrawColor(214, 161, 58);
+    pdf.setLineWidth(1);
+    pdf.rect(4, 4, width - 8, height - 8);
+    pdf.rect(7, 7, width - 14, height - 14);
+
+    let y = 18;
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(12);
+    pdf.setTextColor(214, 161, 58);
+    pdf.text("CASA IBBI", width / 2, y, { align: "center" });
+    y += 9;
+
+    pdf.setFontSize(20);
+    pdf.setTextColor(7, 17, 22);
+    let lines = pdf.splitTextToSize(eventName, width - 20);
+    pdf.text(lines, width / 2, y, { align: "center" });
+    y += lines.length * 7 + 2;
+
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(12);
+    pdf.setTextColor(85, 85, 85);
+    lines = pdf.splitTextToSize(longDate(startDate), width - 20);
+    pdf.text(lines, width / 2, y, { align: "center" });
+    y += lines.length * 5 + 3;
+
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(22);
+    pdf.setTextColor(7, 17, 22);
+    lines = pdf.splitTextToSize(attendeeName, width - 20);
+    pdf.text(lines, width / 2, y, { align: "center" });
+    y += lines.length * 8 + 5;
+
+    if (qrDataUrl) {
+      const qrSize = 58;
+      pdf.addImage(qrDataUrl, "PNG", (width - qrSize) / 2, y, qrSize, qrSize);
+      y += qrSize + 8;
+    }
+
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(12);
+    pdf.setTextColor(85, 85, 85);
+    pdf.text(`Nº do ingresso: ${ticket.code}`, width / 2, y, { align: "center" });
+
+    const file = new File([pdf.output("blob")], `ingresso-${ticket.code}.pdf`, { type: "application/pdf" });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        title: `Ingresso - ${eventName}`,
+        text: `Seu ingresso para ${eventName} (${ticket.code})`,
+      });
+      return;
+    }
+
+    const blobUrl = URL.createObjectURL(file);
+    const a = document.createElement("a");
+    a.href = blobUrl;
+    a.download = file.name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
+    if (whatsappUrl) window.open(whatsappUrl, "_blank");
+  }
+
   return (
     <main>
       <section className="ibbi-event-hero ibbi-simple-hero">
@@ -177,16 +272,15 @@ export function TicketPage({ token }: { token: string }) {
               <Download size={16} /> BAIXAR INGRESSO
             </button>
 
-            {whatsappUrl && (
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+            {waNumber && (
+              <button
+                type="button"
+                onClick={shareTicketPdf}
                 className="ibbi-btn ibbi-btn--full"
-                style={{ marginTop: 12, background: "#25D366", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, textDecoration: "none" }}
+                style={{ marginTop: 12, background: "#25D366", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, textDecoration: "none", cursor: "pointer" }}
               >
-                <MessageCircle size={16} /> ENVIAR INGRESSO PELO WHATSAPP
-              </a>
+                <MessageCircle size={16} /> ENVIAR INGRESSO (PDF) PELO WHATSAPP
+              </button>
             )}
           </div>
         </div>

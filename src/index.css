@@ -2629,6 +2629,12 @@ ul, ol { list-style: none; }
     font-weight: 800;
     color: #071116;
   }
+  .ibbi-print-ticket-date {
+    margin: -8px 0 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+  }
   .ibbi-print-ticket-name {
     margin: 0 0 12px;
     font-size: 24px;

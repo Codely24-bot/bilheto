@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { QRCodeSVG } from "qrcode.react";
-import { ArrowLeft, Download, CalendarDays, MapPin, User, Tag } from "lucide-react";
+import { ArrowLeft, Download, CalendarDays, MapPin, User, Tag, MessageCircle } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { longDate, statusLabel } from "../lib/format";
 
@@ -17,6 +17,7 @@ type TicketData = {
     name: string;
     price: number;
   };
+  orders: { buyer_phone: string } | null;
   events: {
     title: string;
     start_date: string;
@@ -38,6 +39,7 @@ export function TicketPage({ token }: { token: string }) {
         id, code, token, status, checked_in,
         attendees (name, email),
         ticket_batches (ticket_types (name), name, price),
+        orders (buyer_phone),
         events (title, start_date, venue_name, address)
       `)
       .eq("token", token)
@@ -47,11 +49,13 @@ export function TicketPage({ token }: { token: string }) {
           const attendees = Array.isArray(data.attendees) ? data.attendees[0] : data.attendees;
           const tb = Array.isArray(data.ticket_batches) ? data.ticket_batches[0] : data.ticket_batches;
           const tt = tb ? (Array.isArray(tb.ticket_types) ? tb.ticket_types[0] : tb.ticket_types) : null;
+          const ord = Array.isArray(data.orders) ? data.orders[0] : data.orders;
           const ev = Array.isArray(data.events) ? data.events[0] : data.events;
           setTicket({
             ...data,
             attendees: attendees ?? null,
             ticket_batches: { ...tb, ticket_types: tt },
+            orders: ord ?? null,
             events: ev,
           } as TicketData);
         }
@@ -79,11 +83,23 @@ export function TicketPage({ token }: { token: string }) {
   }
 
   const eventName = ticket.events?.title ?? "Evento";
-  const startDate = ticket.events?.start_date ?? "2026-09-19T19:00:00-03:00";
+  const startDate = "2026-09-19T19:00:00-03:00";
   const venueName = ticket.events?.venue_name ?? "";
   const address = ticket.events?.address ?? "";
   const attendeeName = ticket.attendees?.name ?? "";
   const ticketType = ticket.ticket_batches?.ticket_types?.name ?? "";
+  const phoneDigits = (ticket.orders?.buyer_phone ?? "").replace(/\D+/g, "");
+  const waNumber = phoneDigits.length >= 12 && phoneDigits.startsWith("55")
+    ? phoneDigits
+    : phoneDigits
+      ? `55${phoneDigits}`
+      : "";
+  const ticketUrl = `${window.location.origin}/ingresso/${ticket.token}`;
+  const whatsappUrl = waNumber
+    ? `https://wa.me/${waNumber}?text=${encodeURIComponent(
+        `Olá, ${attendeeName || "você"}! Aqui está o seu ingresso para ${eventName}:\n\n${ticketUrl}\n\nCódigo do ingresso: ${ticket.code}`
+      )}`
+    : null;
 
   return (
     <main>
@@ -160,6 +176,18 @@ export function TicketPage({ token }: { token: string }) {
             <button className="ibbi-btn ibbi-btn--primary ibbi-btn--full" onClick={downloadTicket}>
               <Download size={16} /> BAIXAR INGRESSO
             </button>
+
+            {whatsappUrl && (
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ibbi-btn ibbi-btn--full"
+                style={{ marginTop: 12, background: "#25D366", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, textDecoration: "none" }}
+              >
+                <MessageCircle size={16} /> ENVIAR INGRESSO PELO WHATSAPP
+              </a>
+            )}
           </div>
         </div>
       </section>
@@ -169,6 +197,7 @@ export function TicketPage({ token }: { token: string }) {
           <div className="ibbi-print-ticket-card">
             <p className="ibbi-print-ticket-brand">Casa IBBI</p>
             <h1 className="ibbi-print-ticket-event">{eventName}</h1>
+            <p className="ibbi-print-ticket-date">{longDate(startDate)}</p>
             <p className="ibbi-print-ticket-name">{attendeeName}</p>
             <div className="ibbi-print-ticket-qr">
               <QRCodeSVG value={ticket.token} size={200} bgColor="#FFFFFF" fgColor="#071116" />

@@ -45,8 +45,8 @@ function ticketEventTitle(order: OrderRow) {
   return order.events?.title ?? "Aprendendo a Ser Parceiros";
 }
 
-function ticketEventDate(order: OrderRow) {
-  return longDate(order.events?.start_date ?? "2026-09-19T19:00:00-03:00");
+function ticketEventDate(_order: OrderRow) {
+  return longDate("2026-09-19T19:00:00-03:00");
 }
 
 function ticketEventLocation(order: OrderRow) {

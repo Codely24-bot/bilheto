@@ -58,10 +58,40 @@ export function Media() {
   const [verse, setVerse] = useState(getDailyVerse);
   const [copied, setCopied] = useState(false);
   const [sharing, setSharing] = useState(false);
+  const [shareImage, setShareImage] = useState<Blob | null>(null);
   const shareCardRef = useRef<HTMLDivElement>(null);
   const featured = mediaVideos.find((v) => v.featured);
   const others = mediaVideos.filter((v) => !v.featured);
   const hasVideos = featured?.youtubeId;
+
+  const generateVerseImage = async () => {
+    const card = shareCardRef.current;
+    if (!card) return null;
+    const canvas = await html2canvas(card, {
+      scale: 1,
+      backgroundColor: "#101014",
+      useCORS: true,
+    });
+    return new Promise<Blob | null>((resolve) =>
+      canvas.toBlob(resolve, "image/png")
+    );
+  };
+
+  useEffect(() => {
+    let cancelled = false;
+    const timer = window.setTimeout(async () => {
+      try {
+        const blob = await generateVerseImage();
+        if (!cancelled && blob) setShareImage(blob);
+      } catch {
+        // geração em background falhou — tenta de novo no clique
+      }
+    }, 1200);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [verse]);
 
   useEffect(() => {
     let cancelled = false;
@@ -86,31 +116,35 @@ export function Media() {
     const base = { title: "Versículo do Dia", text };
     setSharing(true);
 
+    const shareWithImage = async (blob: Blob): Promise<boolean> => {
+      if (typeof navigator.canShare !== "function") return false;
+      const file = new File([blob], "versiculo-do-dia.png", {
+        type: "image/png",
+      });
+      const shareData = { ...base, files: [file] };
+      if (!navigator.canShare(shareData)) return false;
+      await navigator.share(shareData);
+      return true;
+    };
+
     try {
       let sharedImage = false;
-      const card = shareCardRef.current;
-      if (card && typeof navigator.canShare === "function") {
+
+      if (shareImage) {
         try {
-          const canvas = await html2canvas(card, {
-            scale: 2,
-            backgroundColor: "#101014",
-            useCORS: true,
-          });
-          const blob = await new Promise<Blob | null>((resolve) =>
-            canvas.toBlob(resolve, "image/png")
-          );
-          if (blob) {
-            const file = new File([blob], "versiculo-do-dia.png", {
-              type: "image/png",
-            });
-            const shareData = { ...base, files: [file] };
-            if (navigator.canShare(shareData)) {
-              await navigator.share(shareData);
-              sharedImage = true;
-            }
-          }
+          sharedImage = await shareWithImage(shareImage);
         } catch {
-          // geração da imagem falhou — segue para o compartilhamento de texto
+          // usuário cancelou — nada a fazer
+          return;
+        }
+      }
+
+      if (!sharedImage) {
+        try {
+          const blob = await generateVerseImage();
+          if (blob) sharedImage = await shareWithImage(blob);
+        } catch {
+          // geração em tempo real falhou — segue para o texto
         }
       }
 
@@ -186,7 +220,7 @@ export function Media() {
               onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
             >
               {copied ? <Check size={16} /> : <Share2 size={16} />}
-              {copied ? "Copiado!" : sharing ? "Gerando imagem..." : "Compartilhar"}
+              {copied ? "Copiado!" : sharing ? "Compartilhando..." : "Compartilhar"}
             </button>
           </div>
         </div>

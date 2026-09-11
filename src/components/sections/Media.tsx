@@ -1,6 +1,5 @@
 import { Play, BookOpen, Share2, Check } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import html2canvas from "html2canvas";
+import { useEffect, useState } from "react";
 import { mediaVideos } from "../../data/media";
 import { siteConfig } from "../../data/siteConfig";
 
@@ -54,34 +53,126 @@ function getDailyVerse() {
   return fallbackVerses[dayOfYear % fallbackVerses.length];
 }
 
+function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
+  const words = text.split(" ");
+  const lines: string[] = [];
+  let line = "";
+  for (const word of words) {
+    const test = line ? `${line} ${word}` : word;
+    if (ctx.measureText(test).width > maxWidth && line) {
+      lines.push(line);
+      line = word;
+    } else {
+      line = test;
+    }
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+
+function drawSpaced(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  centerX: number,
+  baselineY: number,
+  spacing: number
+) {
+  const chars = Array.from(text);
+  const widths = chars.map((ch) => ctx.measureText(ch).width);
+  const total =
+    widths.reduce((acc, w) => acc + w, 0) + spacing * (chars.length - 1);
+  let x = centerX - total / 2;
+  chars.forEach((ch, i) => {
+    ctx.fillText(ch, x, baselineY);
+    x += widths[i] + spacing;
+  });
+}
+
+async function renderVerseImage(verse: { text: string; ref: string }): Promise<Blob | null> {
+  const W = 1080;
+  const H = 1350;
+  const canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return null;
+
+  const grad = ctx.createLinearGradient(0, 0, W, H);
+  grad.addColorStop(0, "#1c1c24");
+  grad.addColorStop(1, "#0f0f14");
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+
+  const frameX = 64;
+  const frameY = 64;
+  const frameW = W - frameX * 2;
+  const frameH = H - frameY * 2;
+  ctx.strokeStyle = "rgba(214,161,58,.45)";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.rect(frameX, frameY, frameW, frameH);
+  ctx.stroke();
+
+  const centerX = W / 2;
+  const maxWidth = frameW - 104;
+
+  const churchBrand =
+    siteConfig.church.name === "IBBI"
+      ? "CASA IBBI"
+      : siteConfig.church.name.toUpperCase();
+
+  ctx.textAlign = "center";
+  ctx.textBaseline = "alphabetic";
+
+  ctx.fillStyle = "#d6a13a";
+  ctx.font = "800 40px Georgia, 'Times New Roman', serif";
+  drawSpaced(ctx, churchBrand, centerX, 270, 20);
+
+  ctx.fillRect(centerX - 64, 304, 128, 3);
+
+  ctx.fillStyle = "rgba(214,161,58,.85)";
+  ctx.font = "700 30px Georgia, 'Times New Roman', serif";
+  drawSpaced(ctx, "VERSÍCULO DO DIA", centerX, 380, 14);
+
+  ctx.fillStyle = "#f5f3ec";
+  ctx.font = "italic 46px Georgia, 'Times New Roman', serif";
+  const lines = wrapText(ctx, verse.text, maxWidth);
+  const lineHeight = 66;
+  const verseTop = 470;
+  const verseBottom = 1080;
+  const blockH = lines.length * lineHeight;
+  const startY = verseTop + Math.max(0, (verseBottom - verseTop - blockH) / 2);
+  lines.forEach((line, i) => {
+    ctx.fillText(line, centerX, startY + i * lineHeight);
+  });
+
+  ctx.fillStyle = "#d6a13a";
+  ctx.font = "700 38px Georgia, 'Times New Roman', serif";
+  ctx.fillText(verse.ref, centerX, 1160);
+
+  ctx.fillStyle = "rgba(245,243,236,.55)";
+  ctx.font = "500 20px system-ui, -apple-system, sans-serif";
+  ctx.fillText(siteConfig.church.fullName, centerX, 1220);
+
+  return new Promise<Blob | null>((resolve) =>
+    canvas.toBlob(resolve, "image/png")
+  );
+}
+
 export function Media() {
   const [verse, setVerse] = useState(getDailyVerse);
   const [copied, setCopied] = useState(false);
   const [sharing, setSharing] = useState(false);
   const [shareImage, setShareImage] = useState<Blob | null>(null);
-  const shareCardRef = useRef<HTMLDivElement>(null);
   const featured = mediaVideos.find((v) => v.featured);
   const others = mediaVideos.filter((v) => !v.featured);
   const hasVideos = featured?.youtubeId;
-
-  const generateVerseImage = async () => {
-    const card = shareCardRef.current;
-    if (!card) return null;
-    const canvas = await html2canvas(card, {
-      scale: 1,
-      backgroundColor: "#101014",
-      useCORS: true,
-    });
-    return new Promise<Blob | null>((resolve) =>
-      canvas.toBlob(resolve, "image/png")
-    );
-  };
 
   useEffect(() => {
     let cancelled = false;
     const timer = window.setTimeout(async () => {
       try {
-        const blob = await generateVerseImage();
+        const blob = await renderVerseImage(verse);
         if (!cancelled && blob) setShareImage(blob);
       } catch {
         // geração em background falhou — tenta de novo no clique
@@ -113,7 +204,7 @@ export function Media() {
 
   const shareVerse = async () => {
     const text = `"${verse.text}" — ${verse.ref}`;
-    const base = { title: "Versículo do Dia", text };
+    const base: ShareData = { title: "Versículo do Dia", text };
     setSharing(true);
 
     const shareWithImage = async (blob: Blob): Promise<boolean> => {
@@ -121,44 +212,56 @@ export function Media() {
       const file = new File([blob], "versiculo-do-dia.png", {
         type: "image/png",
       });
-      const shareData = { ...base, files: [file] };
+      const shareData: ShareData = { ...base, files: [file] };
       if (!navigator.canShare(shareData)) return false;
       await navigator.share(shareData);
       return true;
     };
 
+    const isUserCancel = (err: unknown) =>
+      err instanceof DOMException && err.name === "AbortError";
+
     try {
-      let sharedImage = false;
+      let shared = false;
+      let blob: Blob | null = shareImage;
 
-      if (shareImage) {
+      if (blob && typeof navigator.canShare === "function") {
         try {
-          sharedImage = await shareWithImage(shareImage);
-        } catch {
-          // usuário cancelou — nada a fazer
-          return;
+          shared = await shareWithImage(blob);
+        } catch (err) {
+          if (isUserCancel(err)) return;
         }
       }
 
-      if (!sharedImage) {
+      if (!shared && !blob) {
         try {
-          const blob = await generateVerseImage();
-          if (blob) sharedImage = await shareWithImage(blob);
-        } catch {
-          // geração em tempo real falhou — segue para o texto
+          blob = await renderVerseImage(verse);
+          if (blob) shared = await shareWithImage(blob);
+        } catch (err) {
+          if (isUserCancel(err)) return;
         }
       }
 
-      if (!sharedImage && navigator.share) {
+      if (!shared && navigator.share) {
         try {
           await navigator.share(base);
           return;
-        } catch {
-          // usuário cancelou — nada a fazer
-          return;
+        } catch (err) {
+          if (isUserCancel(err)) return;
         }
       }
 
-      if (!sharedImage) {
+      if (!shared && blob) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "versiculo-do-dia.png";
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        return;
+      }
+
+      if (!shared) {
         await navigator.clipboard.writeText(text);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
@@ -222,63 +325,6 @@ export function Media() {
               {copied ? <Check size={16} /> : <Share2 size={16} />}
               {copied ? "Copiado!" : sharing ? "Compartilhando..." : "Compartilhar"}
             </button>
-          </div>
-        </div>
-
-        {/* Card oculto usado para gerar a imagem compartilhável */}
-        <div
-          ref={shareCardRef}
-          aria-hidden
-          style={{
-            position: "fixed",
-            top: 0,
-            left: -99999,
-            width: 1080,
-            height: 1350,
-            boxSizing: "border-box",
-            background: "linear-gradient(160deg, #1c1c24 0%, #0f0f14 100%)",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: 64,
-            textAlign: "center",
-          }}
-        >
-          <div style={{
-            width: "100%",
-            flex: 1,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "space-around",
-            border: "2px solid rgba(214,161,58,.45)",
-            borderRadius: 22,
-            boxSizing: "border-box",
-            padding: "56px 52px",
-          }}>
-            <div>
-              <div style={{ fontSize: 26, fontWeight: 800, letterSpacing: "0.35em", color: "#d6a13a", textTransform: "uppercase" }}>
-                {siteConfig.church.name === "IBBI" ? "Casa IBBI" : siteConfig.church.name}
-              </div>
-              <div style={{ width: 90, height: 2, background: "#d6a13a", margin: "26px auto" }} />
-              <div style={{ fontSize: 22, fontWeight: 700, letterSpacing: "0.22em", color: "rgba(214,161,58,.85)", textTransform: "uppercase" }}>
-                Versículo do Dia
-              </div>
-            </div>
-
-            <p style={{ fontSize: 46, fontStyle: "italic", lineHeight: 1.45, color: "#f5f3ec", margin: 0, fontFamily: "Georgia, 'Times New Roman', serif" }}>
-              "{verse.text}"
-            </p>
-
-            <div>
-              <div style={{ fontSize: 30, fontWeight: 700, color: "#d6a13a", letterSpacing: "0.04em" }}>
-                {verse.ref}
-              </div>
-              <div style={{ fontSize: 18, color: "rgba(245,243,236,.55)", marginTop: 30, fontWeight: 500 }}>
-                {siteConfig.church.fullName}
-              </div>
-            </div>
           </div>
         </div>
 

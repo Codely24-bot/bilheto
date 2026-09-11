@@ -1,4 +1,4 @@
-import { Play, BookOpen } from "lucide-react";
+import { Play, BookOpen, Share2, Check } from "lucide-react";
 import { useEffect, useState } from "react";
 import { mediaVideos } from "../../data/media";
 
@@ -54,6 +54,7 @@ function getDailyVerse() {
 
 export function Media() {
   const [verse, setVerse] = useState(getDailyVerse);
+  const [copied, setCopied] = useState(false);
   const featured = mediaVideos.find((v) => v.featured);
   const others = mediaVideos.filter((v) => !v.featured);
   const hasVideos = featured?.youtubeId;
@@ -74,6 +75,25 @@ export function Media() {
   const openVideo = (youtubeId: string) => {
     if (!youtubeId) return;
     window.open(`https://www.youtube.com/watch?v=${youtubeId}`, "_blank");
+  };
+
+  const shareVerse = async () => {
+    const text = `"${verse.text}" — ${verse.ref}`;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: "Versículo do Dia", text });
+        return;
+      } catch {
+        // usuário cancelou ou falhou — segue para o fallback
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // clipboard indisponível
+    }
   };
 
   return (
@@ -105,6 +125,30 @@ export function Media() {
           <cite style={{ fontSize: 15, fontWeight: 700, color: "var(--gold)", fontStyle: "normal", letterSpacing: "0.04em" }}>
             — {verse.ref}
           </cite>
+          <div style={{ marginTop: 24 }}>
+            <button
+              onClick={shareVerse}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "10px 20px",
+                background: "var(--gold)",
+                color: "#1c1c22",
+                border: "none",
+                borderRadius: 999,
+                fontSize: 14,
+                fontWeight: 700,
+                cursor: "pointer",
+                transition: "opacity .2s",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.88"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
+            >
+              {copied ? <Check size={16} /> : <Share2 size={16} />}
+              {copied ? "Copiado!" : "Compartilhar"}
+            </button>
+          </div>
         </div>
 
         {/* Vídeos — abaixo do versículo */}

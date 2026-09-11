@@ -88,6 +88,42 @@ function drawSpaced(
   });
 }
 
+let cachedLogo: HTMLImageElement | null = null;
+let logoLoading: Promise<HTMLImageElement | null> | null = null;
+
+function loadLogo(): Promise<HTMLImageElement | null> {
+  if (cachedLogo) return Promise.resolve(cachedLogo);
+  if (logoLoading) return logoLoading;
+  logoLoading = new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      cachedLogo = img;
+      resolve(img);
+    };
+    img.onerror = () => resolve(null);
+    img.src = "/logo-casa-ibbi.svg";
+  });
+  return logoLoading;
+}
+
+function tintLogo(
+  logo: HTMLImageElement,
+  w: number,
+  h: number
+): HTMLCanvasElement {
+  const c = document.createElement("canvas");
+  c.width = w;
+  c.height = h;
+  const cx = c.getContext("2d");
+  if (cx) {
+    cx.drawImage(logo, 0, 0, w, h);
+    cx.globalCompositeOperation = "source-in";
+    cx.fillStyle = "#d6a13a";
+    cx.fillRect(0, 0, w, h);
+  }
+  return c;
+}
+
 async function renderVerseImage(verse: { text: string; ref: string }): Promise<Blob | null> {
   const W = 1080;
   const H = 1350;
@@ -116,19 +152,27 @@ async function renderVerseImage(verse: { text: string; ref: string }): Promise<B
   const centerX = W / 2;
   const maxWidth = frameW - 104;
 
-  const churchBrand =
-    siteConfig.church.name === "IBBI"
-      ? "CASA IBBI"
-      : siteConfig.church.name.toUpperCase();
-
   ctx.textAlign = "center";
   ctx.textBaseline = "alphabetic";
 
-  ctx.fillStyle = "#d6a13a";
-  ctx.font = "800 40px Georgia, 'Times New Roman', serif";
-  drawSpaced(ctx, churchBrand, centerX, 270, 20);
+  const logo = await loadLogo();
+  if (logo) {
+    const logoW = 440;
+    const logoH = 110;
+    const logoX = centerX - logoW / 2;
+    const logoY = 180;
+    ctx.drawImage(tintLogo(logo, logoW, logoH), logoX, logoY, logoW, logoH);
+  } else {
+    const churchBrand =
+      siteConfig.church.name === "IBBI"
+        ? "CASA IBBI"
+        : siteConfig.church.name.toUpperCase();
+    ctx.fillStyle = "#d6a13a";
+    ctx.font = "800 40px Georgia, 'Times New Roman', serif";
+    drawSpaced(ctx, churchBrand, centerX, 270, 20);
+  }
 
-  ctx.fillRect(centerX - 64, 304, 128, 3);
+  ctx.fillRect(centerX - 64, 330, 128, 3);
 
   ctx.fillStyle = "rgba(214,161,58,.85)";
   ctx.font = "700 30px Georgia, 'Times New Roman', serif";

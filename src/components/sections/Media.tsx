@@ -1,6 +1,8 @@
 import { Play, BookOpen, Share2, Check } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import html2canvas from "html2canvas";
 import { mediaVideos } from "../../data/media";
+import { siteConfig } from "../../data/siteConfig";
 
 const fallbackVerses = [
   { text: "Porque eu bem sei os pensamentos que penso de vós, diz o Senhor; pensamentos de paz, e não de mal, para vos dar o fim que esperais.", ref: "Jeremias 29:11" },
@@ -55,6 +57,8 @@ function getDailyVerse() {
 export function Media() {
   const [verse, setVerse] = useState(getDailyVerse);
   const [copied, setCopied] = useState(false);
+  const [sharing, setSharing] = useState(false);
+  const shareCardRef = useRef<HTMLDivElement>(null);
   const featured = mediaVideos.find((v) => v.featured);
   const others = mediaVideos.filter((v) => !v.featured);
   const hasVideos = featured?.youtubeId;
@@ -79,20 +83,54 @@ export function Media() {
 
   const shareVerse = async () => {
     const text = `"${verse.text}" — ${verse.ref}`;
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: "Versículo do Dia", text });
-        return;
-      } catch {
-        // usuário cancelou ou falhou — segue para o fallback
-      }
-    }
+    const base = { title: "Versículo do Dia", text };
+    setSharing(true);
+
     try {
-      await navigator.clipboard.writeText(text);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // clipboard indisponível
+      let sharedImage = false;
+      const card = shareCardRef.current;
+      if (card && typeof navigator.canShare === "function") {
+        try {
+          const canvas = await html2canvas(card, {
+            scale: 2,
+            backgroundColor: "#101014",
+            useCORS: true,
+          });
+          const blob = await new Promise<Blob | null>((resolve) =>
+            canvas.toBlob(resolve, "image/png")
+          );
+          if (blob) {
+            const file = new File([blob], "versiculo-do-dia.png", {
+              type: "image/png",
+            });
+            const shareData = { ...base, files: [file] };
+            if (navigator.canShare(shareData)) {
+              await navigator.share(shareData);
+              sharedImage = true;
+            }
+          }
+        } catch {
+          // geração da imagem falhou — segue para o compartilhamento de texto
+        }
+      }
+
+      if (!sharedImage && navigator.share) {
+        try {
+          await navigator.share(base);
+          return;
+        } catch {
+          // usuário cancelou — nada a fazer
+          return;
+        }
+      }
+
+      if (!sharedImage) {
+        await navigator.clipboard.writeText(text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }
+    } finally {
+      setSharing(false);
     }
   };
 
@@ -128,6 +166,7 @@ export function Media() {
           <div style={{ marginTop: 24 }}>
             <button
               onClick={shareVerse}
+              disabled={sharing}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -139,15 +178,73 @@ export function Media() {
                 borderRadius: 999,
                 fontSize: 14,
                 fontWeight: 700,
-                cursor: "pointer",
+                cursor: sharing ? "wait" : "pointer",
+                opacity: sharing ? 0.7 : 1,
                 transition: "opacity .2s",
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.88"; }}
+              onMouseEnter={(e) => { if (!sharing) e.currentTarget.style.opacity = "0.88"; }}
               onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
             >
               {copied ? <Check size={16} /> : <Share2 size={16} />}
-              {copied ? "Copiado!" : "Compartilhar"}
+              {copied ? "Copiado!" : sharing ? "Gerando imagem..." : "Compartilhar"}
             </button>
+          </div>
+        </div>
+
+        {/* Card oculto usado para gerar a imagem compartilhável */}
+        <div
+          ref={shareCardRef}
+          aria-hidden
+          style={{
+            position: "fixed",
+            top: 0,
+            left: -99999,
+            width: 1080,
+            height: 1350,
+            boxSizing: "border-box",
+            background: "linear-gradient(160deg, #1c1c24 0%, #0f0f14 100%)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 64,
+            textAlign: "center",
+          }}
+        >
+          <div style={{
+            width: "100%",
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "space-around",
+            border: "2px solid rgba(214,161,58,.45)",
+            borderRadius: 22,
+            boxSizing: "border-box",
+            padding: "56px 52px",
+          }}>
+            <div>
+              <div style={{ fontSize: 26, fontWeight: 800, letterSpacing: "0.35em", color: "#d6a13a", textTransform: "uppercase" }}>
+                {siteConfig.church.name === "IBBI" ? "Casa IBBI" : siteConfig.church.name}
+              </div>
+              <div style={{ width: 90, height: 2, background: "#d6a13a", margin: "26px auto" }} />
+              <div style={{ fontSize: 22, fontWeight: 700, letterSpacing: "0.22em", color: "rgba(214,161,58,.85)", textTransform: "uppercase" }}>
+                Versículo do Dia
+              </div>
+            </div>
+
+            <p style={{ fontSize: 46, fontStyle: "italic", lineHeight: 1.45, color: "#f5f3ec", margin: 0, fontFamily: "Georgia, 'Times New Roman', serif" }}>
+              "{verse.text}"
+            </p>
+
+            <div>
+              <div style={{ fontSize: 30, fontWeight: 700, color: "#d6a13a", letterSpacing: "0.04em" }}>
+                {verse.ref}
+              </div>
+              <div style={{ fontSize: 18, color: "rgba(245,243,236,.55)", marginTop: 30, fontWeight: 500 }}>
+                {siteConfig.church.fullName}
+              </div>
+            </div>
           </div>
         </div>
 

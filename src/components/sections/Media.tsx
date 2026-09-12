@@ -105,7 +105,7 @@ function loadLogo(): Promise<HTMLImageElement | null> {
       logoLoading = null;
       resolve(null);
     };
-    img.src = "/logo-casa-ibbi.jpg";
+    img.src = "/logo-casa-ibbi.png";
   });
   return logoLoading;
 }
